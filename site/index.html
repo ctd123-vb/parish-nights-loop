@@ -1,0 +1,1711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loop Practice Online | Parish Nights</title>
+<meta name="description" content="Paste a YouTube or TikTok dance video. Loop the move, slow it down, mirror it, and share the loop.">
+<meta name="theme-color" content="#E7ECF4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#13203A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👢</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Zilla+Slab:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#E7ECF4; --surface:#FFFFFF; --surface-2:#EEF2F8; --line:#C9D3E3;
+  --text:#15233D; --muted:#4F5F7C; --accent:#F0AE35; --accent-ink:#2A1C02;
+  --denim:#2B4677; --on-denim:#FFFFFF; --stage:#0F1A2E;
+  --danger:#B3261E; --danger-bg:#FBE9E7; --grain:rgba(110,62,0,.22);
+  --slab:"Zilla Slab",Rockwell,"Roboto Slab","Courier New",Georgia,serif;
+  --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#13203A; --surface:#1B2B4A; --surface-2:#243759; --line:#324A76;
+    --text:#EEF2F8; --muted:#A5B6D3; --accent:#F2B544; --accent-ink:#241802;
+    --denim:#8FB0E6; --on-denim:#10203A; --stage:#0A1426;
+    --danger:#FFB4AB; --danger-bg:#3A1F2A; --grain:rgba(90,50,0,.28);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#13203A; --surface:#1B2B4A; --surface-2:#243759; --line:#324A76;
+  --text:#EEF2F8; --muted:#A5B6D3; --accent:#F2B544; --accent-ink:#241802;
+  --denim:#8FB0E6; --on-denim:#10203A; --stage:#0A1426;
+  --danger:#FFB4AB; --danger-bg:#3A1F2A; --grain:rgba(90,50,0,.28);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.45;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body.lock{overflow:hidden}
+[hidden]{display:none !important}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wrap{max-width:560px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 16px;
+  border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--text);
+  font:700 17px/1.1 var(--sans);cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;
+  transition:transform .08s ease,background-color .15s ease}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.btn svg{width:22px;height:22px;flex:none}
+.btn[aria-pressed="true"]{background:var(--denim);border-color:var(--denim);color:var(--on-denim)}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-outline{border-color:var(--accent);border-width:2px}
+.btn-wide{width:100%}
+:focus-visible{outline:3px solid var(--denim);outline-offset:3px}
+
+/* Header */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
+.brand{display:flex;flex-direction:column;line-height:1.1}
+.mark{font-family:var(--slab);font-weight:700;font-size:23px}
+.sub{font-size:15px;color:var(--muted)}
+.change{min-height:44px;padding:0 14px;font-size:15px}
+
+/* Picker */
+.picker{padding:4px 0 24px}
+.hero-loop{position:relative;height:100px;margin:10px 18px 26px}
+.hl-rail{position:absolute;left:0;right:0;top:56px;height:12px;border-radius:6px;background:var(--surface);border:1px solid var(--line)}
+.hl-band,.band{background-color:var(--accent);
+  background-image:repeating-linear-gradient(90deg,transparent 0 9px,var(--grain) 9px 10px,transparent 10px 23px,var(--grain) 23px 24px,transparent 24px 31px)}
+.hl-band{position:absolute;left:24%;width:46%;top:48px;height:28px;border-radius:6px}
+.hl-flag{position:absolute;top:0;width:34px;height:34px;margin-left:-17px;border-radius:9px;background:var(--text);color:var(--bg);
+  font:700 19px/34px var(--slab);text-align:center;z-index:2}
+.hl-flag::after{content:"";position:absolute;left:50%;top:34px;width:3px;margin-left:-1.5px;height:22px;background:var(--text)}
+.hl-flag.a{left:24%} .hl-flag.b{left:70%}
+.hl-head{position:absolute;top:42px;height:40px;width:5px;margin-left:-2.5px;border-radius:3px;background:var(--denim);
+  box-shadow:0 0 0 2px var(--bg);left:24%;animation:sweep 2.6s linear infinite;z-index:1}
+@keyframes sweep{0%{left:24%}84%{left:70%}85%{left:24%}100%{left:24%}}
+h1{font-family:var(--slab);font-weight:700;font-size:clamp(34px,9.5vw,48px);line-height:1.04;margin:0 0 12px}
+.lede{font-size:18px;color:var(--muted);margin:0 0 26px;max-width:36ch}
+.pick{width:100%;min-height:64px;font-size:19px;border-radius:16px}
+.pick svg{width:26px;height:26px}
+.note{font-size:15px;color:var(--muted);margin:14px 0 0;text-align:center}
+.err{margin:6px 0 20px;padding:14px 16px;border-radius:14px;background:var(--danger-bg);border-left:5px solid var(--danger)}
+.err strong{display:block;margin-bottom:4px;font-size:18px}
+.err p{margin:0}
+.err .small{margin-top:8px;font-size:15px;color:var(--muted)}
+
+/* Stage */
+.stage{position:relative;background:var(--stage);border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  min-height:180px;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.stage video{display:block;width:100%;height:auto;max-height:60vh;max-height:60svh;object-fit:contain;background:var(--stage)}
+.stage video.mirrored{transform:scaleX(-1)}
+.chips{position:absolute;top:10px;left:10px;right:64px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.chip{background:rgba(8,16,32,.74);color:#fff;font-size:14px;font-weight:700;padding:5px 11px;border-radius:999px}
+.hint{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;transition:opacity .15s ease}
+.hint span{width:76px;height:76px;border-radius:50%;background:rgba(8,16,32,.55);display:grid;place-items:center;color:#fff}
+.hint svg{width:38px;height:38px;margin-left:4px}
+.is-playing .hint,.stage.loading .hint,.stage.counting .hint{opacity:0}
+.loadmsg{position:absolute;inset:0;display:none;place-items:center;color:#fff;font-weight:700}
+.stage.loading .loadmsg{display:grid}
+.fs-open{position:absolute;top:10px;right:10px;width:48px;height:48px;border-radius:14px;border:0;background:rgba(8,16,32,.62);
+  color:#fff;display:grid;place-items:center;cursor:pointer}
+.fs-open svg{width:24px;height:24px}
+.cd{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:4px;pointer-events:none;color:#fff;
+  background:rgba(8,16,32,.35);text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.cd b{font:700 clamp(96px,26vw,180px)/1 var(--slab)}
+.cd span{font-weight:700;font-size:18px}
+
+/* Full screen practice view */
+.fs-ui{display:none;transition:opacity .2s ease}
+.stage.focus{position:fixed;inset:0;z-index:50;border-radius:0;background:#000;min-height:0;height:100%}
+.stage.focus video{width:100%;height:100%;max-height:none;background:#000}
+.stage.focus .fs-ui{display:block}
+.stage.focus .hint,.stage.focus .fs-open{display:none}
+.stage.focus .chips{top:calc(env(safe-area-inset-top,0px) + 22px);left:50%;right:auto;transform:translateX(-50%);flex-wrap:nowrap}
+.stage.ui-hidden .fs-ui{opacity:0;pointer-events:none}
+.stage.ui-hidden{cursor:none}
+.fs-ui{--text:#FFFFFF;--bg:#0B1322;--surface:rgba(255,255,255,.2);--line:rgba(255,255,255,.3);--denim:#9CBAF0;color:#fff}
+.fs-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) calc(env(safe-area-inset-right,0px) + 14px) 18px calc(env(safe-area-inset-left,0px) + 14px);
+  background:linear-gradient(rgba(0,0,0,.55),transparent)}
+.fs-bottom{position:absolute;left:0;right:0;bottom:0;
+  padding:30px calc(env(safe-area-inset-right,0px) + 14px) calc(env(safe-area-inset-bottom,0px) + 14px) calc(env(safe-area-inset-left,0px) + 14px);
+  background:linear-gradient(transparent,rgba(0,0,0,.75) 42%)}
+.fs-inner{max-width:760px;margin:0 auto}
+.fs-time{font-family:var(--slab);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin:0 4px -6px}
+.fs-time span{font-weight:600;opacity:.75}
+.fs-row{display:flex;justify-content:center;align-items:center;gap:10px}
+.fs-btn{min-width:54px;height:54px;border-radius:15px;border:0;background:rgba(255,255,255,.18);color:#fff;
+  font:700 17px var(--sans);display:inline-grid;place-items:center;padding:0 10px;cursor:pointer;touch-action:manipulation}
+.fs-btn:active{transform:scale(.95)}
+.fs-btn b{font-family:var(--slab);font-size:24px}
+.fs-btn svg{width:24px;height:24px}
+.fs-btn[aria-pressed="true"]{background:#9CBAF0;color:#10203A}
+.fs-play{width:72px;height:72px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;cursor:pointer}
+.fs-play svg{width:34px;height:34px}
+.fs-play .ic-play{margin-left:4px}
+
+/* Timeline */
+.timebar{display:flex;justify-content:space-between;align-items:baseline;margin:14px 2px 0;font-family:var(--slab);font-variant-numeric:tabular-nums}
+#tNow{font-size:28px;font-weight:700}
+#tDur{font-size:18px;color:var(--muted)}
+.track{position:relative;height:76px;margin:0 16px;touch-action:none;cursor:pointer;border-radius:8px}
+.rail{position:absolute;left:0;right:0;top:50px;height:12px;border-radius:6px;background:var(--surface);border:1px solid var(--line)}
+.played{position:absolute;left:0;top:50px;height:12px;width:0;border-radius:6px 0 0 6px;background:var(--denim);opacity:.5}
+.band{position:absolute;top:42px;height:28px;border-radius:6px}
+.head{position:absolute;top:36px;height:40px;width:5px;margin-left:-2.5px;border-radius:3px;background:var(--text);
+  box-shadow:0 0 0 2px var(--bg);pointer-events:none;left:0}
+.handle{position:absolute;top:0;width:32px;height:32px;margin-left:-16px;border-radius:9px;background:var(--text);color:var(--bg);
+  font:700 18px/32px var(--slab);text-align:center;pointer-events:none}
+.handle::after{content:"";position:absolute;left:50%;top:32px;width:3px;margin-left:-1.5px;height:12px;background:var(--text)}
+.handle.grab{transform:scale(1.12)}
+
+/* Controls */
+.transport{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:10px}
+.setbtn{min-height:80px;flex-direction:column;gap:3px;border-radius:18px;padding:0 8px}
+.setbtn .big{font-family:var(--slab);font-size:30px;line-height:1}
+.setbtn .lbl{font-size:15px}
+.playbtn{width:88px;height:88px;border-radius:50%;border:0;padding:0;background:var(--accent);color:var(--accent-ink)}
+.playbtn svg{width:40px;height:40px}
+.playbtn .ic-play{margin-left:5px}
+.ic-pause{display:none}
+.is-playing .ic-play{display:none}
+.is-playing .ic-pause{display:block}
+
+.panel{margin-top:16px;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:4px 12px 4px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0 10px;border-bottom:1px solid var(--line)}
+#loopStatus{font-size:15px;color:var(--muted);margin:0}
+.reset{min-height:44px;padding:0 14px;font-size:15px;flex:none}
+.prow{display:flex;align-items:center;gap:10px;padding:10px 0}
+.prow + .prow{border-top:1px solid var(--line)}
+.pflag{width:34px;height:34px;border-radius:9px;background:var(--surface-2);color:var(--muted);font:700 18px/34px var(--slab);text-align:center;flex:none}
+.is-set .pflag{background:var(--text);color:var(--bg)}
+.pinfo{flex:1;min-width:0;line-height:1.15}
+.pname{display:block;font-size:15px;color:var(--muted)}
+.ptime{font-family:var(--slab);font-size:23px;font-weight:700;font-variant-numeric:tabular-nums}
+.prow:not(.is-set) .ptime{font-size:18px;color:var(--muted);font-weight:600}
+.nudge{min-width:62px;min-height:48px;padding:0 8px;font-size:16px;border-radius:12px}
+.panel-foot{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 0 10px;border-top:1px solid var(--line)}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.group{margin-top:18px}
+.glabel{font-size:15px;color:var(--muted);margin:0 2px 6px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:4px}
+.seg.three{grid-template-columns:repeat(3,1fr)}
+.seg button{min-height:50px;border:0;background:transparent;border-radius:10px;font:700 17px var(--sans);color:var(--text);cursor:pointer;touch-action:manipulation}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.vol{display:flex;align-items:center;gap:12px}
+.mute{width:56px;min-height:52px;padding:0;flex:none}
+.ic-off{display:none}
+.is-muted .ic-on{display:none}
+.is-muted .ic-off{display:block}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:52px;background:transparent;margin:0;cursor:pointer;--fill:100%}
+input[type=range]::-webkit-slider-runnable-track{height:12px;border-radius:6px;border:1px solid var(--line);
+  background:linear-gradient(to right,var(--denim) var(--fill),var(--surface) var(--fill))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;margin-top:-11px;border-radius:50%;
+  background:var(--surface);border:3px solid var(--denim);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+input[type=range]::-moz-range-track{height:12px;border-radius:6px;border:1px solid var(--line);background:var(--surface)}
+input[type=range]::-moz-range-progress{height:12px;border-radius:6px;background:var(--denim)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--surface);border:3px solid var(--denim)}
+.helper{font-size:15px;color:var(--muted);margin:8px 2px 0}
+
+/* Saved loops */
+.saved{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.saved li{display:flex;gap:8px}
+.saved-main{flex:1;min-width:0;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:10px 14px;min-height:62px;text-align:left}
+.saved-main .sn{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-main .sd{font-weight:400;font-size:15px;color:var(--muted)}
+.saved li.is-active .saved-main{border-color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.saved-del{width:54px;padding:0;flex:none}
+
+/* Sheets */
+.sheet-bg{position:fixed;inset:0;z-index:70;background:rgba(6,12,24,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--surface);color:var(--text);border-radius:22px 22px 0 0;
+  padding:22px max(18px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));
+  max-height:92vh;overflow:auto;animation:sheetUp .22s ease-out}
+@keyframes sheetUp{from{transform:translateY(28px);opacity:0}}
+.sheet h2{font-family:var(--slab);font-size:27px;line-height:1.1;margin:0 0 6px}
+.sheet .meta{color:var(--muted);margin:0 0 14px}
+.actions{display:grid;gap:10px;margin-top:18px}
+.text-input{width:100%;min-height:56px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);font:400 18px var(--sans);padding:0 14px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.switch-row small{display:block;color:var(--muted);font-size:15px}
+input.switch{-webkit-appearance:none;appearance:none;width:56px;height:34px;border-radius:17px;background:var(--line);position:relative;flex:none;cursor:pointer;margin:0;transition:background .15s}
+input.switch::after{content:"";position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s}
+input.switch:checked{background:var(--denim)}
+input.switch:checked::after{transform:translateX(22px)}
+.progress{height:12px;border-radius:6px;background:var(--surface-2);overflow:hidden;margin:18px 0 10px}
+.progress i{display:block;height:100%;width:0;background:var(--accent)}
+.clip-preview{display:block;width:100%;max-height:42vh;max-height:42svh;border-radius:14px;background:var(--stage);object-fit:contain}
+
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;
+  display:flex;align-items:center;gap:14px;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:700;font-size:16px;
+  max-width:calc(100vw - 32px);text-align:center;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:90}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.has-action.show{pointer-events:auto}
+.toast button{background:transparent;border:0;color:inherit;font:700 16px var(--sans);text-decoration:underline;min-height:36px;padding:0 4px;cursor:pointer}
+.stage.focus .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 190px)}
+body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-radius:18px}
+
+@media (prefers-reduced-motion: reduce){
+  .hl-head{animation:none}
+  .btn,.toast,.hint,.fs-ui,.sheet{transition:none;animation:none}
+}
+@media (min-width: 900px), (orientation: landscape) and (max-height: 540px){
+  .wrap.wide{max-width:1120px}
+  .player{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,1fr);gap:22px;align-items:start}
+  .transport{margin-top:0}
+}
+@media (orientation: landscape) and (max-height: 540px){
+  .stage:not(.focus) video{max-height:calc(100vh - 150px);max-height:calc(100svh - 150px)}
+  .bar{padding:8px 0}
+  .fs-bottom{padding-top:20px}
+  .fs-play{width:62px;height:62px}
+  .fs-btn{height:48px}
+  .stage.focus .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}
+}
+
+/* Online version */
+.wrap{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+.home{padding:4px 0 24px}
+.linkrow{display:flex;gap:8px}
+.linkrow .text-input{flex:1;min-width:0;background:var(--surface)}
+.paste{flex:none;min-height:56px}
+.open{width:100%;min-height:64px;font-size:19px;border-radius:16px;margin-top:10px}
+.open svg{width:26px;height:26px}
+.err-link{margin-top:12px;min-height:48px;text-decoration:none}
+.howto{margin-top:18px;border-top:1px solid var(--line);padding-top:4px}
+.howto summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer}
+.howto ol{margin:0 0 8px;padding-left:22px;color:var(--muted)}
+.howto li{margin:4px 0}
+.warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--danger-bg);border-left:5px solid var(--danger);font-size:15px}
+.frame{position:relative;flex:none;width:min(100%, calc(60vh * var(--arn,1.7778)));width:min(100%, calc(60svh * var(--arn,1.7778)));
+  aspect-ratio:var(--ar,16/9);background:#000}
+.frame iframe,.frame>div{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.frame.mirrored{transform:scaleX(-1)}
+.tap{position:absolute;inset:0;z-index:1}
+.stage:not(.tap-on) .tap{pointer-events:none}
+.stage:not(.tap-on) .hint{display:none}
+.stage .hint,.stage .chips,.stage .fs-open,.stage .fs-top,.stage .fs-bottom{z-index:2}
+.stage .cd,.stage .loadmsg{z-index:3}
+.stage.loading .loadmsg{background:var(--stage)}
+.stage.focus .frame{width:100%;height:100%;aspect-ratio:auto}
+.time-hint{text-align:center;margin:2px 0 0}
+/* Loading screen */
+.stage.loading{min-height:270px}
+.stage.loading .loadmsg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;text-align:center;font-weight:400}
+.ld-loop{position:relative;width:170px;height:26px;margin-bottom:4px}
+.ld-rail{position:absolute;left:0;right:0;top:9px;height:8px;border-radius:4px;background:rgba(255,255,255,.18)}
+.ld-band{position:absolute;left:24%;width:46%;top:4px;height:18px;border-radius:5px;background-color:var(--accent);
+  background-image:repeating-linear-gradient(90deg,transparent 0 9px,var(--grain) 9px 10px,transparent 10px 23px)}
+.ld-head{position:absolute;top:0;height:26px;width:4px;margin-left:-2px;border-radius:2px;background:#fff;left:24%;animation:sweep 1.6s linear infinite}
+.ld-title{margin:0;font:700 18px/1.3 var(--sans);max-width:30ch}
+.ld-bar{width:min(240px,72%);height:6px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
+.ld-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.ld-tip{margin:0;font-size:15px;color:rgba(255,255,255,.75);max-width:32ch;min-height:1.4em}
+.ld-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+.ld-btn{min-height:44px;font-size:15px}
+.buf{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;display:none;align-items:center;gap:8px;
+  background:rgba(8,16,32,.8);color:#fff;padding:8px 14px;border-radius:999px;font-weight:700;font-size:15px;pointer-events:none;white-space:nowrap}
+.stage.buffering:not(.loading) .buf{display:flex}
+.stage.focus .buf{bottom:calc(env(safe-area-inset-bottom,0px) + 200px)}
+.spin{width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.ld-head,.spin{animation:none}.ld-bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <header class="bar">
+    <div class="brand">
+      <span class="mark">Parish Nights</span>
+      <span class="sub">Loop practice online</span>
+    </div>
+    <button class="btn change" id="newVideo" type="button" hidden>New video</button>
+  </header>
+
+  <main>
+    <section class="home" id="home">
+      <div class="err" id="err" role="alert" hidden>
+        <strong id="errTitle"></strong>
+        <p id="errText"></p>
+        <a class="btn err-link" id="errLink" hidden>Open the phone version</a>
+      </div>
+      <div class="hero-loop" aria-hidden="true">
+        <div class="hl-rail"></div>
+        <div class="hl-band"></div>
+        <span class="hl-flag a">A</span>
+        <span class="hl-flag b">B</span>
+        <div class="hl-head"></div>
+      </div>
+      <h1>Loop any dance video from YouTube or TikTok.</h1>
+      <p class="lede">Paste the video's link. Mark where the move starts and ends, then slow it down and repeat it.</p>
+      <p class="warn" id="fileNote" hidden></p>
+      <label class="vh" for="link">Video link</label>
+      <div class="linkrow">
+        <input class="text-input" id="link" type="url" inputmode="url" placeholder="Paste a video link" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
+        <button class="btn paste" id="pasteBtn" type="button">Paste</button>
+      </div>
+      <button class="btn btn-accent open" id="openBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="13" height="13" rx="2.5"/><path d="M15.5 10.5l5-3v9l-5-3"/></svg>
+        <span id="openText">Open video</span>
+      </button>
+      <p class="note">Works with YouTube and TikTok links. Instagram isn't supported yet.</p>
+      <details class="howto">
+        <summary>How do I copy a video's link?</summary>
+        <ol>
+          <li>Open the video in the YouTube or TikTok app.</li>
+          <li>Tap <b>Share</b>, then <b>Copy link</b>.</li>
+          <li>Come back here and tap <b>Paste</b>.</li>
+        </ol>
+      </details>
+      <div class="group" id="recentGroup" hidden>
+        <p class="glabel">Recent videos</p>
+        <ul class="saved" id="recentList"></ul>
+      </div>
+    </section>
+
+    <section class="player" id="player" hidden>
+      <div class="col-video">
+        <div class="stage loading" id="stage">
+          <div class="frame" id="frame"></div>
+          <div class="tap" id="tap" aria-hidden="true"></div>
+          <div class="chips">
+            <span class="chip" id="chipReps" hidden></span>
+            <span class="chip" id="chipSpeed" hidden></span>
+            <span class="chip" id="chipMirror" hidden>Mirrored</span>
+          </div>
+          <div class="hint" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.8v14.4a1 1 0 0 0 1.52.85l11.2-7.2a1 1 0 0 0 0-1.7L8.52 3.95A1 1 0 0 0 7 4.8z"/></svg></span></div>
+          <div class="cd" id="cd" hidden aria-live="assertive"><b id="cdNum">3</b><span>Get in position</span></div>
+          <div class="loadmsg" id="loadBox">
+            <div class="ld-loop" aria-hidden="true"><div class="ld-rail"></div><div class="ld-band"></div><div class="ld-head"></div></div>
+            <p class="ld-title" id="ldTitle" role="status" aria-live="polite">Opening video…</p>
+            <div class="ld-bar" aria-hidden="true"><i id="ldBar"></i></div>
+            <p class="ld-tip" id="ldTip"></p>
+            <div class="ld-actions" id="ldActions" hidden>
+              <button class="btn ld-btn" id="ldRetry" type="button">Try again</button>
+              <button class="btn ld-btn" id="ldCancel" type="button">Pick another video</button>
+            </div>
+          </div>
+          <div class="buf" aria-live="polite"><span class="spin" aria-hidden="true"></span><span id="bufText">Loading…</span></div>
+          <button class="fs-open" id="fsOpen" type="button" aria-label="Full screen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          </button>
+
+          <div class="fs-ui" id="fsUi">
+            <div class="fs-top">
+              <button class="fs-btn" id="fsExit" type="button" aria-label="Exit full screen">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
+              <button class="fs-btn" id="fsMirror" type="button" aria-pressed="false" aria-label="Mirror">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" stroke-dasharray="2.5 2.5"/><path d="M9 7L3.5 17H9z"/><path d="M15 7l5.5 10H15z" fill="currentColor"/></svg>
+              </button>
+            </div>
+            <div class="fs-bottom">
+              <div class="fs-inner">
+                <div class="fs-time"><span id="fsNow" style="opacity:1;font-weight:700">0:00.0</span><span id="fsDur"> / 0:00.0</span></div>
+                <div class="track" id="fsTrack" role="slider" tabindex="0" aria-label="Video position" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+                  <div class="rail"></div><div class="played"></div><div class="band" hidden></div>
+                  <div class="handle ha" hidden>A</div><div class="handle hb" hidden>B</div><div class="head"></div>
+                </div>
+                <div class="fs-row">
+                  <button class="fs-btn" id="fsToA" type="button" aria-label="Back to A">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5v14"/><path d="M19 5.5v13L9 12z" fill="currentColor"/></svg>
+                  </button>
+                  <button class="fs-btn" id="fsSetA" type="button" aria-label="Set start A here"><b>A</b></button>
+                  <button class="fs-play" id="fsPlay" type="button" aria-label="Play">
+                    <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4a1 1 0 0 0 1.52.85l11.2-7.2a1 1 0 0 0 0-1.7L8.52 3.95A1 1 0 0 0 7 4.8z"/></svg>
+                    <svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5.5" y="4" width="4.5" height="16" rx="1.3"/><rect x="14" y="4" width="4.5" height="16" rx="1.3"/></svg>
+                  </button>
+                  <button class="fs-btn" id="fsSetB" type="button" aria-label="Set end B here"><b>B</b></button>
+                  <button class="fs-btn" id="fsSpeed" type="button" aria-label="Change speed">100%</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="timebar"><span id="tNow">0:00.0</span><span id="tDur">--:--</span></div>
+        <p class="helper time-hint" id="timeHint" hidden>Press play once to load the timeline.</p>
+        <div class="track" id="track" role="slider" tabindex="0" aria-label="Video position" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+          <div class="rail"></div><div class="played"></div><div class="band" hidden></div>
+          <div class="handle ha" hidden>A</div><div class="handle hb" hidden>B</div><div class="head"></div>
+        </div>
+      </div>
+
+      <div class="col-controls">
+        <div class="transport">
+          <button class="btn setbtn" id="setA" type="button"><span class="big">A</span><span class="lbl">Set start</span></button>
+          <button class="btn playbtn" id="play" type="button" aria-label="Play">
+            <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4a1 1 0 0 0 1.52.85l11.2-7.2a1 1 0 0 0 0-1.7L8.52 3.95A1 1 0 0 0 7 4.8z"/></svg>
+            <svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5.5" y="4" width="4.5" height="16" rx="1.3"/><rect x="14" y="4" width="4.5" height="16" rx="1.3"/></svg>
+          </button>
+          <button class="btn setbtn" id="setB" type="button"><span class="big">B</span><span class="lbl">Set end</span></button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <p id="loopStatus">Set a start and end to repeat a section.</p>
+            <button class="btn reset" id="reset" type="button" disabled>Reset loop</button>
+          </div>
+          <div class="prow" id="rowA">
+            <span class="pflag" aria-hidden="true">A</span>
+            <div class="pinfo"><span class="pname">Start</span><span class="ptime" id="aTime">Not set</span></div>
+            <button class="btn nudge" id="aMinus" type="button" aria-label="Move start earlier by 0.1 seconds" disabled>−0.1s</button>
+            <button class="btn nudge" id="aPlus" type="button" aria-label="Move start later by 0.1 seconds" disabled>+0.1s</button>
+          </div>
+          <div class="prow" id="rowB">
+            <span class="pflag" aria-hidden="true">B</span>
+            <div class="pinfo"><span class="pname">End</span><span class="ptime" id="bTime">Not set</span></div>
+            <button class="btn nudge" id="bMinus" type="button" aria-label="Move end earlier by 0.1 seconds" disabled>−0.1s</button>
+            <button class="btn nudge" id="bPlus" type="button" aria-label="Move end later by 0.1 seconds" disabled>+0.1s</button>
+          </div>
+          <div class="panel-foot">
+            <button class="btn" id="toA" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5v14"/><path d="M19 5.5v13L9 12z" fill="currentColor"/></svg>
+              Back to A
+            </button>
+            <button class="btn" id="saveLoop" type="button" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></svg>
+              Save loop
+            </button>
+          </div>
+        </div>
+
+        <div class="group" id="savedGroup" hidden>
+          <p class="glabel">Saved loops for this video</p>
+          <ul class="saved" id="savedList"></ul>
+        </div>
+
+        <div class="group" id="speedGroup">
+          <p class="glabel" id="speedLabel">Speed</p>
+          <div class="seg" role="group" aria-labelledby="speedLabel">
+            <button type="button" data-speed="0.25" aria-pressed="false">25%</button>
+            <button type="button" data-speed="0.5" aria-pressed="false">50%</button>
+            <button type="button" data-speed="0.75" aria-pressed="false">75%</button>
+            <button type="button" data-speed="1" aria-pressed="true">100%</button>
+          </div>
+        </div>
+        <p class="helper" id="speedNote" hidden>Slow motion isn't available for TikTok videos. TikTok's player only plays at normal speed.</p>
+
+        <div class="group">
+          <p class="glabel" id="cdLabel">Countdown before each rep</p>
+          <div class="seg three" role="group" aria-labelledby="cdLabel">
+            <button type="button" data-cd="0" aria-pressed="true">Off</button>
+            <button type="button" data-cd="3" aria-pressed="false">3 sec</button>
+            <button type="button" data-cd="5" aria-pressed="false">5 sec</button>
+          </div>
+        </div>
+
+        <div class="row2">
+          <button class="btn" id="mirror" type="button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18" stroke-dasharray="2.5 2.5"/><path d="M9 7L3.5 17H9z"/><path d="M15 7l5.5 10H15z" fill="currentColor"/></svg>
+            Mirror
+          </button>
+          <button class="btn" id="fsOpen2" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            Full screen
+          </button>
+        </div>
+
+        <div class="group">
+          <p class="glabel" id="volLabel">Volume</p>
+          <div class="vol">
+            <button class="btn mute" id="mute" type="button" aria-label="Mute" aria-pressed="false">
+              <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6"/><path d="M18.3 6.3a8 8 0 0 1 0 11.4"/></svg>
+              <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+            </button>
+            <input type="range" id="vol" min="0" max="100" step="1" value="100" aria-labelledby="volLabel">
+          </div>
+        </div>
+
+        <div class="group">
+          <button class="btn btn-outline btn-wide" id="shareBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13"/></svg>
+            Share this loop
+          </button>
+          <p class="helper" id="shareHelper"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" id="nameSheet" role="dialog" aria-modal="true" aria-labelledby="nameTitle" hidden>
+    <h2 id="nameTitle">Name this loop</h2>
+    <p class="meta" id="nameMeta"></p>
+    <input class="text-input" id="nameInput" type="text" maxlength="40" autocomplete="off" enterkeyhint="done" aria-labelledby="nameTitle">
+    <div class="actions">
+      <button class="btn btn-accent" id="nameSave" type="button">Save loop</button>
+      <button class="btn" id="nameCancel" type="button">Cancel</button>
+    </div>
+  </div>
+  <div class="sheet" id="linkSheet" role="dialog" aria-modal="true" aria-labelledby="linkTitle" hidden>
+    <h2 id="linkTitle">Copy this link</h2>
+    <p class="meta">Send it in a text or group chat. It opens this video with your loop ready to go.</p>
+    <input class="text-input" id="linkOut" type="text" readonly aria-labelledby="linkTitle">
+    <div class="actions">
+      <button class="btn btn-accent" id="linkCopy" type="button">Copy link</button>
+      <button class="btn" id="linkClose" type="button">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastBtn" type="button" hidden></button></div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ===== Settings you can change when you host this page =====
+  // Link to the phone-video version of Loop Practice, for example '/phone/'. Leave empty to hide it.
+  const OFFLINE_APP_URL = '/phone/';
+  // Optional: URL of the link-resolver worker, so short TikTok links (vm.tiktok.com) work.
+  const LINK_RESOLVER_URL = '';
+  // ===========================================================
+
+  const $ = (id) => document.getElementById(id);
+  const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+  const MIN_LOOP = 0.3;
+  const SPEEDS = [0.25, 0.5, 0.75, 1];
+
+  const home = $('home'), player = $('player'), stage = $('stage'), frame = $('frame'), tap = $('tap');
+  const linkInput = $('link'), openBtn = $('openBtn'), openText = $('openText'), pasteBtn = $('pasteBtn');
+  const errBox = $('err'), errTitle = $('errTitle'), errText = $('errText'), errLink = $('errLink');
+  const newBtn = $('newVideo'), recentGroup = $('recentGroup'), recentList = $('recentList'), fileNote = $('fileNote');
+  const tNow = $('tNow'), tDur = $('tDur'), fsNow = $('fsNow'), fsDur = $('fsDur'), timeHint = $('timeHint');
+  const loopStatus = $('loopStatus'), aTime = $('aTime'), bTime = $('bTime'), rowA = $('rowA'), rowB = $('rowB');
+  const aMinus = $('aMinus'), aPlus = $('aPlus'), bMinus = $('bMinus'), bPlus = $('bPlus');
+  const resetBtn = $('reset'), saveLoopBtn = $('saveLoop');
+  const speedGroup = $('speedGroup'), speedNote = $('speedNote'), fsSpeed = $('fsSpeed');
+  const speedBtns = Array.from(document.querySelectorAll('[data-speed]'));
+  const cdBtns = Array.from(document.querySelectorAll('[data-cd]'));
+  const muteBtn = $('mute'), volSlider = $('vol'), volLabel = $('volLabel'), mirrorBtn = $('mirror'), fsMirror = $('fsMirror');
+  const chipReps = $('chipReps'), chipSpeed = $('chipSpeed'), chipMirror = $('chipMirror');
+  const cdEl = $('cd'), cdNum = $('cdNum');
+  const savedGroup = $('savedGroup'), savedList = $('savedList'), shareBtn = $('shareBtn'), shareHelper = $('shareHelper');
+  const sheetBg = $('sheetBg'), nameSheet = $('nameSheet'), nameInput = $('nameInput'), nameMeta = $('nameMeta');
+  const linkSheet = $('linkSheet'), linkOut = $('linkOut');
+  const ldTitle = $('ldTitle'), ldBar = $('ldBar'), ldTip = $('ldTip'), ldActions = $('ldActions'), bufText = $('bufText');
+  const toastEl = $('toast'), toastMsg = $('toastMsg'), toastBtn = $('toastBtn');
+
+  const ERR = {
+    empty: ['Paste a link first', 'Copy the video link from YouTube or TikTok, then paste it in the box.'],
+    bad: ["That isn't a video link", 'Open the video, tap Share, then Copy link. Paste that here.'],
+    unsupported: ["That site isn't supported yet", 'Paste a link from YouTube or TikTok.'],
+    ytNoId: ["That link doesn't open one video", 'Open the video itself on YouTube, tap Share, then Copy link.'],
+    tiktokNoId: ["That link doesn't open one video", 'Open the video itself on TikTok, tap Share, then Copy link.'],
+    tiktokShort: ['Use the full TikTok link', "Short TikTok links (vm.tiktok.com) can't open here yet. Open the link in your browser, then copy the full address from the address bar. It has /video/ and a long number in it."],
+    tiktokShortFail: ["That short TikTok link didn't open", 'Open the link in your browser, then copy the full address from the address bar. It has /video/ and a long number in it.'],
+    instagram: ["Instagram isn't supported yet", "Instagram doesn't let other websites control its videos, so looping and slow motion can't work here. For now, save the video to your phone and use the phone version of Loop Practice."],
+    ytScript: ["YouTube didn't load", "If you're viewing this inside the Claude app or another preview, YouTube is blocked there. Open the page on your website instead. Otherwise, check your internet connection and tap Open video again."],
+    ytSlow: ['YouTube is taking too long', 'Check your internet connection and try again.'],
+    yt2: ['That YouTube link is broken', 'Copy the link again from the Share button.'],
+    yt5: ["This video won't play in this browser", 'Try a different video or a different browser.'],
+    yt100: ["This video isn't available", 'It may be private, age-restricted, or removed.'],
+    yt101: ["This video can't play outside YouTube", 'The owner turned off playing on other websites. Try a different video.'],
+    yt150: ["This video can't play outside YouTube", 'The owner turned off playing on other websites. Try a different video.'],
+    yt153: ['YouTube blocked the player', "This page has to be opened from a website, like loop.parishnights.com. It won't work as a saved file."],
+    tt1001: ["This TikTok video can't be found", 'It may be private or deleted.'],
+    tt2001: ['TikTok had a problem', 'Wait a minute and try again.'],
+    tt3001: ["This TikTok video won't play", 'Try a different video or a different browser.'],
+    other: ["This video won't play here", 'Try a different video.']
+  };
+
+  // ---------- State ----------
+  let P = null, kind = null, vid = null, vertical = false;
+  let ready = false, dur = 0, curT = 0, isPlaying = false, hasPlayed = false;
+  let A = null, B = null, rate = 1, mirrored = false, reps = 0, wrapping = false, wrapAt = 0;
+  let counting = false, cdTimer = null, pending = null, activeName = '', saved = [];
+  let lastLink = '';
+  let loadToken = 0, readyTimer = null, playCheck = null, urlTimer = null, busy = false;
+  let drag = null, dragEl = null, wasPlaying = false, lastSeek = 0;
+  let inFocus = false, uiTimer = null, wake = null, audioCtx = null, toastTimer = null, toastAction = null;
+
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  const prefs = Object.assign({ countdown: 0, volume: 1, muted: false }, store.get('pnOnline:prefs', {}));
+  let countdown = prefs.countdown, volume = prefs.volume, muted = prefs.muted;
+  const savePrefs = () => store.set('pnOnline:prefs', { countdown, volume, muted });
+
+  function fmt(t) {
+    if (!isFinite(t) || t < 0) t = 0;
+    const d = Math.round(t * 10), m = Math.floor(d / 600), s = (d - m * 600) / 10;
+    return m + ':' + (s < 10 ? '0' : '') + s.toFixed(1);
+  }
+  const secs = (t) => t.toFixed(1) + ' sec';
+  const loopSet = () => A != null && B != null;
+
+  // ---------- Link parsing ----------
+  function parseLink(raw) {
+    let s = (raw || '').trim();
+    if (!s) return { err: 'empty' };
+    const m = s.match(/https?:\/\/[^\s<>"']+/i);
+    if (m) s = m[0];
+    else {
+      const m2 = s.match(/(?:[\w-]+\.)+[a-z]{2,}\/[^\s<>"']*/i);
+      if (!m2) return { err: 'bad' };
+      s = 'https://' + m2[0];
+    }
+    let u;
+    try { u = new URL(s); } catch (e) { return { err: 'bad' }; }
+    const host = u.hostname.toLowerCase().replace(/^www\./, '');
+    const parts = u.pathname.split('/').filter(Boolean);
+    const ytId = /^[A-Za-z0-9_-]{11}$/;
+
+    if (host === 'youtu.be') {
+      const id = parts[0] || '';
+      return ytId.test(id) ? { kind: 'yt', id, vertical: false } : { err: 'ytNoId' };
+    }
+    if (/(^|\.)youtube(-nocookie)?\.com$/.test(host)) {
+      let id = u.searchParams.get('v') || '', vert = false;
+      if (!id && ['shorts', 'live', 'embed', 'v', 'e'].includes(parts[0])) { id = parts[1] || ''; vert = parts[0] === 'shorts'; }
+      return ytId.test(id) ? { kind: 'yt', id, vertical: vert } : { err: 'ytNoId' };
+    }
+    if (/(^|\.)tiktok\.com$/.test(host)) {
+      if (/^(vm|vt)\./.test(host) || parts[0] === 't') return { err: 'tiktokShort', url: u.toString() };
+      const mm = u.pathname.match(/\/(?:video|v1|v2|embed)\/(?:v2\/)?(\d{8,25})/);
+      return mm ? { kind: 'tt', id: mm[1], vertical: true } : { err: 'tiktokNoId' };
+    }
+    if (/(^|\.)(instagram\.com|instagr\.am)$/.test(host)) return { err: 'instagram' };
+    return { err: 'unsupported' };
+  }
+
+  // ---------- YouTube player ----------
+  let ytApiPromise = null;
+  function loadYouTubeApi() {
+    if (window.YT && window.YT.Player) return Promise.resolve();
+    if (ytApiPromise) return ytApiPromise;
+    ytApiPromise = new Promise((resolve, reject) => {
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { try { if (prev) prev(); } catch (e) {} resolve(); };
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      s.async = true;
+      s.onerror = () => { ytApiPromise = null; s.remove(); reject(new Error('load')); };
+      document.head.appendChild(s);
+      setTimeout(() => { if (!(window.YT && window.YT.Player)) { ytApiPromise = null; reject(new Error('timeout')); } }, 15000);
+    });
+    return ytApiPromise;
+  }
+
+  function makeYouTube(id, host, ev) {
+    const mount = document.createElement('div');
+    host.appendChild(mount);
+    const vars = { controls: 0, playsinline: 1, rel: 0, disablekb: 1, fs: 0, iv_load_policy: 3, modestbranding: 1 };
+    if (/^https?:$/.test(location.protocol)) vars.origin = location.origin;
+    const map = { '-1': 'other', 0: 'ended', 1: 'playing', 2: 'paused', 3: 'buffering', 5: 'other' };
+    const p = new window.YT.Player(mount, {
+      videoId: id, width: '100%', height: '100%', playerVars: vars,
+      events: {
+        onReady: () => ev.ready(),
+        onStateChange: (e) => ev.state(map[e.data] || 'other'),
+        onError: (e) => ev.error('yt' + e.data)
+      }
+    });
+    const call = (fn, ...args) => { try { return typeof p[fn] === 'function' ? p[fn](...args) : undefined; } catch (e) { return undefined; } };
+    return {
+      play: () => call('playVideo'),
+      pause: () => call('pauseVideo'),
+      seek: (t, final = true) => call('seekTo', t, final),
+      time: () => +call('getCurrentTime') || 0,
+      duration: () => +call('getDuration') || 0,
+      setRate: (r) => call('setPlaybackRate', r),
+      rates: () => call('getAvailablePlaybackRates') || [1],
+      setVolume: (v) => call('setVolume', Math.round(v * 100)),
+      setMuted: (m) => call(m ? 'mute' : 'unMute'),
+      title: () => { const d = call('getVideoData'); return (d && d.title) || ''; },
+      destroy: () => { call('destroy'); host.innerHTML = ''; }
+    };
+  }
+
+  // ---------- TikTok player (official embed player v1) ----------
+  function makeTikTok(id, host, ev) {
+    const f = document.createElement('iframe');
+    const opts = 'controls=1&progress_bar=0&timestamp=0&play_button=1&volume_control=0&fullscreen_button=0' +
+      '&music_info=0&description=0&rel=0&native_context_menu=0&closed_caption=0&autoplay=0&loop=0';
+    f.src = 'https://www.tiktok.com/player/v1/' + id + '?' + opts;
+    f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+    f.title = 'TikTok video';
+    host.appendChild(f);
+    let t = 0, at = performance.now(), playing = false, d = 0, gotReady = false;
+    const cur = () => playing ? Math.min(t + (performance.now() - at) / 1000, d || Infinity) : t;
+    const send = (type, value) => {
+      try { f.contentWindow.postMessage({ type, value, 'x-tiktok-player': true }, '*'); } catch (e) {}
+    };
+    const states = { '-1': 'other', 0: 'ended', 1: 'playing', 2: 'paused', 3: 'buffering' };
+    function onMsg(e) {
+      if (e.source !== f.contentWindow) return;
+      let msg = e.data;
+      if (typeof msg === 'string') { try { msg = JSON.parse(msg); } catch (err) { return; } }
+      if (!msg || !msg['x-tiktok-player']) return;
+      if (!gotReady) { gotReady = true; ev.ready(); }
+      const v = msg.value;
+      switch (msg.type) {
+        case 'onStateChange': {
+          const s = states[v] || 'other';
+          t = cur(); at = performance.now();
+          playing = s === 'playing';
+          ev.state(s);
+          break;
+        }
+        case 'onCurrentTime':
+          if (v && typeof v.currentTime === 'number') { t = v.currentTime; at = performance.now(); }
+          if (v && v.duration > 0) d = v.duration;
+          break;
+        case 'onPlayerError': ev.error('tt' + (v && v.errorCode)); break;
+        case 'onError': ev.error('tt3001'); break;
+      }
+    }
+    window.addEventListener('message', onMsg);
+    return {
+      play: () => send('play'),
+      pause: () => { t = cur(); playing = false; send('pause'); },
+      seek: (x) => { t = x; at = performance.now(); send('seekTo', x); },
+      time: cur,
+      duration: () => d,
+      setRate() {}, rates: () => [1], setVolume() {},
+      setMuted: (m) => send(m ? 'mute' : 'unMute'),
+      title: () => '',
+      destroy: () => { window.removeEventListener('message', onMsg); host.innerHTML = ''; }
+    };
+  }
+
+  // ---------- Loading and buffering ----------
+  // Waiting feels shorter when people can see progress, know why it's slow, and have a way out.
+  const TIPS = [
+    'Tip: Loop just 4 to 8 counts at a time.',
+    'Tip: Tap Mirror to follow it like a class.',
+    'Tip: Set a 3 second countdown to get in position.',
+    'Tip: Save a loop and name it after the move.',
+    'Tip: Send a loop link to your dance partner.',
+    'Tip: Nail it 5 times in a row before moving on.'
+  ];
+  let ldTimer = null, ldStart = 0, ldTipBase = 0, ldLastTitle = '', bufTimer = null;
+  let lastOpen = null;
+
+  function startLoading() {
+    stopLoading();
+    ldStart = performance.now();
+    ldTipBase = Math.floor(Math.random() * TIPS.length);
+    ldLastTitle = '';
+    ldActions.hidden = true;
+    ldBar.style.width = '0%';
+    ldTick();
+    ldTimer = setInterval(ldTick, 250);
+  }
+
+  function ldTick() {
+    const t = (performance.now() - ldStart) / 1000;
+    const src = kind === 'tt' ? 'TikTok' : 'YouTube';
+    let title;
+    if (t < 2) title = 'Opening ' + src + '…';
+    else if (t < 6) title = 'Loading your video…';
+    else if (t < 12) title = src + ' is a little slow. Almost there.';
+    else title = "Still loading. It's not stuck, " + src + ' is just slow right now.';
+    if (title !== ldLastTitle) { ldTitle.textContent = title; ldLastTitle = title; }
+    // Moves fast at first, then eases toward 95% until the video is ready.
+    ldBar.style.width = (95 * (1 - Math.exp(-t / 4))).toFixed(1) + '%';
+    ldTip.textContent = TIPS[(ldTipBase + Math.floor(t / 4)) % TIPS.length];
+    if (t >= 12) ldActions.hidden = false;
+  }
+
+  function stopLoading() {
+    if (ldTimer) clearInterval(ldTimer);
+    ldTimer = null;
+    ldBar.style.width = '100%';
+  }
+
+  function setBuffering(on, text) {
+    clearTimeout(bufTimer);
+    if (!on) { stage.classList.remove('buffering'); return; }
+    bufText.textContent = text || 'Loading…';
+    // Short hiccups don't need a spinner. Only show it if the wait lasts.
+    bufTimer = setTimeout(() => stage.classList.add('buffering'), text ? 0 : 600);
+  }
+
+  // ---------- Opening videos ----------
+  function showErr(code) {
+    const e = ERR[code] || ERR.other;
+    errTitle.textContent = e[0];
+    errText.textContent = e[1];
+    errLink.hidden = !(code === 'instagram' && OFFLINE_APP_URL);
+    if (!errLink.hidden) errLink.href = OFFLINE_APP_URL;
+    errBox.hidden = false;
+    errBox.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  const hideErr = () => { errBox.hidden = true; };
+
+  function setBusy(on) {
+    busy = on;
+    openBtn.disabled = on;
+    openText.textContent = on ? 'Opening…' : 'Open video';
+  }
+
+  async function openLink(raw) {
+    if (busy) return;
+    hideErr();
+    let r = parseLink(raw);
+    if (r.err === 'tiktokShort' && LINK_RESOLVER_URL) {
+      setBusy(true);
+      try {
+        const res = await fetch(LINK_RESOLVER_URL + '?url=' + encodeURIComponent(r.url));
+        const j = await res.json();
+        r = j && j.url ? parseLink(j.url) : { err: 'tiktokShortFail' };
+        if (r.err === 'tiktokShort') r = { err: 'tiktokShortFail' };
+      } catch (e) { r = { err: 'tiktokShortFail' }; }
+      setBusy(false);
+    }
+    if (r.err) { showErr(r.err); return; }
+    lastLink = (raw || '').trim();
+    linkInput.blur();
+    startVideo(r.kind, r.id, r.vertical, null);
+  }
+
+  function teardown() {
+    loadToken++;
+    stopCountdown();
+    clearTimeout(readyTimer); clearTimeout(playCheck);
+    if (P) { try { P.destroy(); } catch (e) {} P = null; }
+    frame.innerHTML = '';
+    ready = false; isPlaying = false; hasPlayed = false; dur = 0; curT = 0;
+    stopLoading(); setBuffering(false);
+    stage.classList.remove('tap-on');
+    stage.classList.add('loading');
+    wakeOff();
+  }
+
+  function startVideo(k, id, vert, params) {
+    teardown();
+    const token = loadToken;
+    kind = k; vid = id; vertical = k === 'tt' ? true : !!vert;
+    A = B = null; reps = 0; wrapping = false; activeName = '';
+    pending = params;
+    rate = params && params.s ? params.s : 1;
+    if (params) mirrored = !!params.m;
+
+    hideErr();
+    home.hidden = true; player.hidden = false; newBtn.hidden = false;
+    document.getElementById('wrap').classList.add('wide');
+    frame.style.setProperty('--ar', vertical ? '9 / 16' : '16 / 9');
+    frame.style.setProperty('--arn', vertical ? '0.5625' : '1.7778');
+    syncKind();
+    loadSaved();
+    addRecent('');
+    lastOpen = { k, id, vert, params };
+    startLoading();
+    window.scrollTo(0, 0);
+
+    const ev = {
+      ready: () => { if (token === loadToken) onReady(); },
+      state: (s) => { if (token === loadToken) onState(s); },
+      error: (c) => { if (token === loadToken) failLoad(ERR[c] ? c : (k === 'yt' ? 'other' : 'tt3001')); }
+    };
+    readyTimer = setTimeout(() => {
+      if (token !== loadToken || ready) return;
+      if (k === 'yt') failLoad('ytSlow');
+      else { onReady(); toast("TikTok is slow. If the buttons don't work, tap the video to start it."); }
+    }, 30000);
+
+    if (k === 'yt') {
+      loadYouTubeApi()
+        .then(() => { if (token === loadToken) P = makeYouTube(id, frame, ev); })
+        .catch(() => { if (token === loadToken) failLoad('ytScript'); });
+    } else {
+      P = makeTikTok(id, frame, ev);
+    }
+    syncAll();
+    scheduleURL();
+  }
+
+  function failLoad(code) {
+    goHome(true);
+    showErr(code);
+  }
+
+  function goHome(keepLink) {
+    exitFocus();
+    teardown();
+    kind = vid = null;
+    player.hidden = true; home.hidden = false; newBtn.hidden = true;
+    document.getElementById('wrap').classList.remove('wide');
+    linkInput.value = keepLink === true ? lastLink : '';
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    renderRecent();
+  }
+
+  function onReady() {
+    if (ready) return;
+    ready = true;
+    clearTimeout(readyTimer);
+    stopLoading();
+    stage.classList.remove('loading');
+    if (kind === 'yt') {
+      P.setVolume(volume);
+      P.setMuted(muted);
+      applyRate();
+      const title = P.title();
+      if (title) addRecent(title);
+    } else if (muted) {
+      P.setMuted(true);
+    }
+    dur = P.duration();
+    if (pending && pending.a != null) {
+      A = pending.a; B = pending.b; activeName = pending.n || '';
+      if (dur) clampLoop();
+      if (loopSet()) { P.seek(A); curT = A; }
+      toast(activeName ? 'Opened "' + activeName + '". Press play.' : 'Loop opened. Press play.');
+    }
+    pending = null;
+    syncAll();
+  }
+
+  function onState(s) {
+    if (s === 'playing') {
+      isPlaying = true;
+      if (!hasPlayed) { hasPlayed = true; stage.classList.add('tap-on'); }
+      if (kind === 'tt' && !muted) P.setMuted(false);
+      clearTimeout(playCheck);
+      stage.classList.remove('loading');
+      setBuffering(false);
+      wakeOn();
+    } else if (s === 'buffering') {
+      setBuffering(true);
+    } else if (s === 'paused') {
+      isPlaying = false;
+      setBuffering(false);
+      wakeOff();
+    } else if (s === 'ended') {
+      isPlaying = false;
+      wakeOff();
+      if (loopSet() && !counting) wrap();
+    }
+    syncPlay();
+  }
+
+  // ---------- Playback ----------
+  function togglePlay() {
+    if (!P || !ready) return;
+    ensureAudio();
+    if (counting) { stopCountdown(); syncPlay(); return; }
+    if (isPlaying) { P.pause(); isPlaying = false; syncPlay(); return; }
+    if (loopSet() && (curT < A - 0.05 || curT >= B - 0.05)) { P.seek(A); curT = A; wrapping = false; }
+    if (loopSet() && countdown > 0 && hasPlayed) { runCountdown(); return; }
+    doPlay();
+  }
+
+  function doPlay() {
+    P.play();
+    if (kind === 'tt' && !muted) P.setMuted(false);
+    isPlaying = true;
+    syncPlay();
+    if (!hasPlayed) {
+      setBuffering(true, 'Starting…');
+      clearTimeout(playCheck);
+      playCheck = setTimeout(() => {
+        if (hasPlayed) return;
+        isPlaying = false;
+        setBuffering(false);
+        syncPlay();
+        toast('Tap the video once to start it.');
+      }, 2500);
+    }
+  }
+
+  function wrap() {
+    wrapping = true; wrapAt = performance.now();
+    reps++;
+    if (countdown > 0) {
+      P.pause(); isPlaying = false;
+      P.seek(A); curT = A;
+      runCountdown();
+    } else {
+      P.seek(A); curT = A;
+      P.play(); isPlaying = true;
+    }
+    syncChips(); syncPlay();
+  }
+
+  function runCountdown() {
+    stopCountdown();
+    counting = true;
+    let n = countdown;
+    cdNum.textContent = n; cdEl.hidden = false;
+    stage.classList.add('counting');
+    beep(660);
+    cdTimer = setInterval(() => {
+      n--;
+      if (n > 0) { cdNum.textContent = n; beep(660); return; }
+      stopCountdown();
+      beep(1040, 0.25);
+      if (loopSet()) { P.seek(A); curT = A; }
+      P.play(); isPlaying = true;
+      syncPlay();
+    }, 1000);
+    syncPlay();
+  }
+
+  function stopCountdown() {
+    if (cdTimer) clearInterval(cdTimer);
+    cdTimer = null; counting = false;
+    cdEl.hidden = true;
+    stage.classList.remove('counting');
+  }
+
+  function tick() {
+    requestAnimationFrame(tick);
+    if (!P || !ready) return;
+    if (!drag) curT = P.time();
+    if (!dur) {
+      const d = P.duration();
+      if (d > 0) { dur = d; clampLoop(); syncLoop(); }
+    }
+    if (isPlaying && !counting && !drag && loopSet()) {
+      if (wrapping) {
+        if (curT < B - 0.15 || performance.now() - wrapAt > 1500) wrapping = false;
+      } else if (curT >= B - 0.03) {
+        wrap();
+      }
+    }
+    renderTime();
+  }
+
+  function clampLoop() {
+    if (!dur) return;
+    if (A != null && A > dur - MIN_LOOP) A = null;
+    if (B != null) B = Math.min(B, dur);
+    if (A != null && B != null && B - A < MIN_LOOP) { A = null; B = null; }
+  }
+
+  function seekTo(t) {
+    if (!P || !ready) return;
+    P.seek(t); curT = t; wrapping = false;
+  }
+
+  // ---------- Loop points ----------
+  function setA() {
+    if (!ready) return;
+    const t = curT;
+    if (B != null && t > B - MIN_LOOP) { B = null; toast('End cleared. Now set a new end.'); }
+    A = t; activeName = ''; reps = 0;
+    afterLoopChange();
+  }
+
+  function setB() {
+    if (!ready) return;
+    const t = curT;
+    if (A == null) {
+      if (t < MIN_LOOP) { toast('Play a little further, then set the end.'); return; }
+      A = 0;
+      toast('Start set to the beginning.');
+    }
+    if (t < A + MIN_LOOP) { toast('The end needs to be after the start.'); return; }
+    B = t; activeName = ''; reps = 0;
+    if (isPlaying) { P.seek(A); curT = A; wrapping = true; wrapAt = performance.now(); }
+    afterLoopChange();
+  }
+
+  function nudge(which, delta) {
+    if (which === 'A' && A != null) {
+      A = clamp(A + delta, 0, B != null ? B - MIN_LOOP : (dur || Infinity));
+      if (!isPlaying) seekTo(A);
+    } else if (which === 'B' && B != null) {
+      B = clamp(B + delta, (A != null ? A : 0) + MIN_LOOP, dur || Infinity);
+      if (!isPlaying) seekTo(B);
+    }
+    activeName = '';
+    afterLoopChange();
+  }
+
+  function resetLoop() {
+    A = B = null; reps = 0; activeName = ''; wrapping = false;
+    afterLoopChange();
+  }
+
+  function afterLoopChange() {
+    syncLoop(); syncChips(); renderTime(); scheduleURL();
+  }
+
+  // ---------- Saved loops and recent videos ----------
+  const vkey = () => kind + ':' + vid;
+  const loopsKey = (k) => 'pnOnline:loops:' + k;
+  const RECENT_KEY = 'pnOnline:recent';
+
+  function loadSaved() {
+    saved = store.get(loopsKey(vkey()), []);
+    if (!Array.isArray(saved)) saved = [];
+    renderSaved();
+  }
+  const persistSaved = () => store.set(loopsKey(vkey()), saved);
+
+  function renderSaved() {
+    savedList.innerHTML = '';
+    savedGroup.hidden = !saved.length;
+    saved.forEach((s, i) => {
+      const li = document.createElement('li');
+      if (loopSet() && s.name === activeName && Math.abs(s.a - A) < 0.05 && Math.abs(s.b - B) < 0.05) li.className = 'is-active';
+      const main = document.createElement('button');
+      main.type = 'button'; main.className = 'btn saved-main';
+      const n = document.createElement('span'); n.className = 'sn'; n.textContent = s.name;
+      const d = document.createElement('span'); d.className = 'sd'; d.textContent = fmt(s.a) + ' to ' + fmt(s.b);
+      main.append(n, d);
+      main.addEventListener('click', () => useSaved(i));
+      const del = document.createElement('button');
+      del.type = 'button'; del.className = 'btn saved-del';
+      del.setAttribute('aria-label', 'Delete ' + s.name);
+      del.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+      del.addEventListener('click', () => deleteSaved(i));
+      li.append(main, del);
+      savedList.append(li);
+    });
+  }
+
+  function useSaved(i) {
+    const s = saved[i];
+    if (!s || !ready) return;
+    A = s.a; B = s.b; activeName = s.name; reps = 0;
+    clampLoop();
+    if (loopSet()) seekTo(A);
+    afterLoopChange();
+  }
+
+  function deleteSaved(i) {
+    const key = loopsKey(vkey()), item = saved[i];
+    saved.splice(i, 1);
+    persistSaved();
+    if (item && item.name === activeName) activeName = '';
+    syncLoop();
+    toast('Loop deleted', 'Undo', () => {
+      const list = store.get(key, []);
+      list.splice(Math.min(i, list.length), 0, item);
+      store.set(key, list);
+      if (loopsKey(vkey()) === key) { saved = list; syncLoop(); }
+    });
+  }
+
+  function openNameSheet() {
+    if (!loopSet()) return;
+    nameInput.value = activeName || 'Loop ' + (saved.length + 1);
+    nameMeta.textContent = fmt(A) + ' to ' + fmt(B) + ' (' + secs(B - A) + ')';
+    openSheet(nameSheet);
+    setTimeout(() => { nameInput.focus(); nameInput.select(); }, 60);
+  }
+
+  function commitName() {
+    if (!loopSet()) { closeSheet(); return; }
+    const name = nameInput.value.trim().slice(0, 40) || 'Loop ' + (saved.length + 1);
+    const item = { name, a: +A.toFixed(2), b: +B.toFixed(2) };
+    const idx = saved.findIndex((s) => s.name.toLowerCase() === name.toLowerCase());
+    if (idx >= 0) saved[idx] = item; else saved.push(item);
+    persistSaved();
+    activeName = name;
+    closeSheet();
+    syncLoop(); scheduleURL();
+    toast('Loop saved');
+  }
+
+  function addRecent(title) {
+    if (!kind) return;
+    let list = store.get(RECENT_KEY, []);
+    if (!Array.isArray(list)) list = [];
+    const k = vkey(), old = list.find((x) => x.k === k);
+    list = list.filter((x) => x.k !== k);
+    list.unshift({ k, title: title || (old && old.title) || '', v: vertical ? 1 : 0 });
+    store.set(RECENT_KEY, list.slice(0, 6));
+  }
+
+  function renderRecent() {
+    const list = store.get(RECENT_KEY, []);
+    recentList.innerHTML = '';
+    recentGroup.hidden = !(Array.isArray(list) && list.length);
+    if (recentGroup.hidden) return;
+    list.forEach((x) => {
+      const [k, id] = String(x.k).split(':');
+      if (!id) return;
+      const loops = store.get(loopsKey(x.k), []);
+      const count = Array.isArray(loops) ? loops.length : 0;
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn saved-main';
+      const n = document.createElement('span'); n.className = 'sn';
+      n.textContent = x.title || (k === 'yt' ? 'YouTube video' : 'TikTok video');
+      const d = document.createElement('span'); d.className = 'sd';
+      d.textContent = (k === 'yt' ? 'YouTube' : 'TikTok') + (count ? ', ' + count + (count === 1 ? ' saved loop' : ' saved loops') : '');
+      b.append(n, d);
+      b.addEventListener('click', () => startVideo(k, id, !!x.v, null));
+      li.append(b);
+      recentList.append(li);
+    });
+  }
+
+  // ---------- Share links ----------
+  function shareUrl() {
+    const base = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : location.href.split(/[?#]/)[0];
+    const q = new URLSearchParams();
+    q.set(kind, vid);
+    if (kind === 'yt' && vertical) q.set('shorts', '1');
+    if (loopSet()) { q.set('a', A.toFixed(1)); q.set('b', B.toFixed(1)); }
+    if (rate !== 1) q.set('s', String(rate));
+    if (mirrored) q.set('m', '1');
+    if (activeName && loopSet()) q.set('n', activeName);
+    return base + '?' + q.toString();
+  }
+
+  function scheduleURL() {
+    clearTimeout(urlTimer);
+    urlTimer = setTimeout(() => {
+      if (!kind) return;
+      try { history.replaceState(null, '', shareUrl()); } catch (e) {}
+    }, 400);
+  }
+
+  async function share() {
+    if (!kind) return;
+    const url = shareUrl();
+    const text = loopSet()
+      ? (activeName ? activeName + ', ' : 'Loop from ') + fmt(A) + ' to ' + fmt(B)
+      : 'Practice video';
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Parish Nights loop', text, url }); return; }
+      catch (e) { if (e && e.name === 'AbortError') return; }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Link copied. Paste it in a text or group chat.');
+    } catch (e) {
+      linkOut.value = url;
+      openSheet(linkSheet);
+      setTimeout(() => { linkOut.focus(); linkOut.select(); }, 60);
+    }
+  }
+
+  function copyFromSheet() {
+    linkOut.focus(); linkOut.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    if (!ok && navigator.clipboard) navigator.clipboard.writeText(linkOut.value).then(() => toast('Link copied')).catch(() => {});
+    else if (ok) toast('Link copied');
+    closeSheet();
+  }
+
+  function readParams() {
+    const q = new URLSearchParams(location.search);
+    const yt = q.get('yt'), tt = q.get('tt');
+    let k = null, id = null;
+    if (yt && /^[A-Za-z0-9_-]{11}$/.test(yt)) { k = 'yt'; id = yt; }
+    else if (tt && /^\d{8,25}$/.test(tt)) { k = 'tt'; id = tt; }
+    if (!k) return false;
+    const a = parseFloat(q.get('a')), b = parseFloat(q.get('b')), s = parseFloat(q.get('s'));
+    const p = {};
+    if (isFinite(a) && isFinite(b) && a >= 0 && b - a >= MIN_LOOP) { p.a = a; p.b = b; }
+    if (SPEEDS.includes(s)) p.s = s;
+    if (q.get('m') === '1') p.m = true;
+    const n = q.get('n');
+    if (n && p.a != null) p.n = n.slice(0, 40);
+    startVideo(k, id, q.get('shorts') === '1', p);
+    return true;
+  }
+
+  // ---------- Speed, mirror, volume ----------
+  function applyRate() {
+    if (!P || kind !== 'yt') return;
+    const avail = P.rates();
+    if (Array.isArray(avail) && avail.length && !avail.includes(rate)) {
+      rate = avail.reduce((best, r) => Math.abs(r - rate) < Math.abs(best - rate) ? r : best, 1);
+    }
+    P.setRate(rate);
+  }
+
+  function setRate(r) {
+    if (kind !== 'yt') return;
+    rate = r;
+    applyRate();
+    syncSpeed(); syncChips(); scheduleURL();
+  }
+
+  function toggleMirror() {
+    mirrored = !mirrored;
+    syncMirror(); syncChips(); scheduleURL();
+  }
+
+  function setVolume(v) {
+    volume = clamp(v, 0, 1);
+    if (muted && volume > 0) { muted = false; if (P) P.setMuted(false); }
+    if (P) P.setVolume(volume);
+    savePrefs(); syncVol();
+  }
+
+  function toggleMute() {
+    muted = !muted;
+    if (!muted && volume === 0) { volume = 0.7; if (P) P.setVolume(volume); }
+    if (P) P.setMuted(muted);
+    savePrefs(); syncVol();
+  }
+
+  // ---------- Full screen ----------
+  function enterFocus() {
+    if (inFocus || !kind) return;
+    inFocus = true;
+    stage.classList.add('focus');
+    document.body.classList.add('lock');
+    const req = stage.requestFullscreen || stage.webkitRequestFullscreen;
+    if (req) { try { const r = req.call(stage); if (r && r.catch) r.catch(() => {}); } catch (e) {} }
+    showUi();
+  }
+
+  function exitFocus() {
+    if (!inFocus) return;
+    inFocus = false;
+    clearTimeout(uiTimer);
+    stage.classList.remove('focus', 'ui-hidden');
+    if (sheetBg.hidden) document.body.classList.remove('lock');
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (fsEl && exit) { try { const r = exit.call(document); if (r && r.catch) r.catch(() => {}); } catch (e) {} }
+  }
+
+  function showUi() {
+    clearTimeout(uiTimer);
+    stage.classList.remove('ui-hidden');
+    if (inFocus && (isPlaying || counting)) {
+      uiTimer = setTimeout(() => { if (inFocus && (isPlaying || counting)) stage.classList.add('ui-hidden'); }, 3000);
+    }
+  }
+
+  function onFsChange() {
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fsEl && inFocus) exitFocus();
+  }
+
+  // ---------- Timeline ----------
+  const tracks = [$('track'), $('fsTrack')].map((el) => ({
+    el, played: el.querySelector('.played'), band: el.querySelector('.band'),
+    ha: el.querySelector('.ha'), hb: el.querySelector('.hb'), head: el.querySelector('.head')
+  }));
+
+  function renderTrack(T) {
+    const pct = (t) => dur > 0 ? clamp(t / dur, 0, 1) * 100 : 0;
+    const now = pct(curT);
+    T.played.style.width = now + '%';
+    T.head.style.left = now + '%';
+    T.ha.hidden = A == null;
+    T.hb.hidden = B == null;
+    if (A != null) T.ha.style.left = pct(A) + '%';
+    if (B != null) T.hb.style.left = pct(B) + '%';
+    T.band.hidden = !loopSet();
+    if (loopSet()) { T.band.style.left = pct(A) + '%'; T.band.style.width = (pct(B) - pct(A)) + '%'; }
+    T.el.setAttribute('aria-valuemax', String(Math.round(dur)));
+    T.el.setAttribute('aria-valuenow', String(Math.round(curT)));
+    T.el.setAttribute('aria-valuetext', fmt(curT));
+  }
+
+  function bindTrack(T) {
+    const el = T.el;
+    el.addEventListener('pointerdown', (e) => {
+      if (!ready) return;
+      if (!dur) { toast('Press play once to load the timeline.'); return; }
+      e.preventDefault();
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const dA = A != null ? Math.abs(A / dur * r.width - x) : Infinity;
+      const dB = B != null ? Math.abs(B / dur * r.width - x) : Infinity;
+      drag = (y < r.height * 0.55 && Math.min(dA, dB) < 26) ? (dA <= dB ? 'A' : 'B') : 'scrub';
+      dragEl = el;
+      if (drag !== 'scrub') (drag === 'A' ? T.ha : T.hb).classList.add('grab');
+      wasPlaying = isPlaying || counting;
+      stopCountdown();
+      if (isPlaying) { P.pause(); isPlaying = false; }
+      el.classList.add('dragging');
+      moveTo(e.clientX);
+    });
+    el.addEventListener('pointermove', (e) => { if (drag && dragEl === el) { e.preventDefault(); moveTo(e.clientX); } });
+    const end = () => { if (dragEl === el) endDrag(T); };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('lostpointercapture', end);
+    el.addEventListener('keydown', (e) => {
+      if (!ready || !dur) return;
+      const step = e.shiftKey ? 0.1 : 1;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); seekTo(clamp(curT - step, 0, dur)); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); seekTo(clamp(curT + step, 0, dur)); }
+    });
+  }
+
+  function moveTo(cx) {
+    const r = dragEl.getBoundingClientRect();
+    let t = clamp((cx - r.left) / r.width, 0, 1) * dur;
+    if (drag === 'A') {
+      A = clamp(t, 0, (B != null ? B : dur) - MIN_LOOP);
+      t = A;
+    } else if (drag === 'B') {
+      B = clamp(t, (A != null ? A : 0) + MIN_LOOP, dur);
+      t = B;
+    }
+    curT = t;
+    const now = performance.now();
+    if (now - lastSeek > 140) { lastSeek = now; P.seek(t, false); }
+    if (drag !== 'scrub') { syncLoop(); }
+    renderTime();
+  }
+
+  function endDrag(T) {
+    if (!drag) return;
+    const d = drag;
+    drag = null; dragEl.classList.remove('dragging'); dragEl = null;
+    T.ha.classList.remove('grab'); T.hb.classList.remove('grab');
+    if (d !== 'scrub') { activeName = ''; reps = 0; }
+    P.seek(d === 'B' && wasPlaying ? A : curT, true);
+    if (d === 'B' && wasPlaying) curT = A;
+    wrapping = false;
+    if (wasPlaying) { P.play(); isPlaying = true; }
+    afterLoopChange(); syncPlay();
+  }
+
+  // ---------- Rendering ----------
+  function syncKind() {
+    const yt = kind === 'yt';
+    speedGroup.hidden = !yt;
+    speedNote.hidden = yt;
+    volSlider.hidden = !yt;
+    volLabel.textContent = yt ? 'Volume' : 'Sound';
+    fsSpeed.hidden = !yt;
+  }
+
+  function syncPlay() {
+    const on = isPlaying || counting;
+    player.classList.toggle('is-playing', on);
+    stage.classList.toggle('is-playing', on);
+    const lbl = on ? 'Pause' : 'Play';
+    $('play').setAttribute('aria-label', lbl);
+    $('fsPlay').setAttribute('aria-label', lbl);
+    if (inFocus) showUi();
+  }
+
+  function syncLoop() {
+    const hasA = A != null, hasB = B != null;
+    rowA.classList.toggle('is-set', hasA);
+    rowB.classList.toggle('is-set', hasB);
+    aTime.textContent = hasA ? fmt(A) : 'Not set';
+    bTime.textContent = hasB ? fmt(B) : 'Not set';
+    aMinus.disabled = aPlus.disabled = !hasA;
+    bMinus.disabled = bPlus.disabled = !hasB;
+    resetBtn.disabled = !(hasA || hasB);
+    saveLoopBtn.disabled = !loopSet();
+    updateStatus();
+    shareHelper.textContent = loopSet()
+      ? 'Sends a link that opens this video with your loop, speed, and mirror already set.'
+      : 'Sends a link to this video. Set a start and end first to share your loop too.';
+    renderSaved();
+  }
+
+  function updateStatus() {
+    if (loopSet()) {
+      loopStatus.textContent = (activeName ? activeName + ': ' : 'Looping ') + secs(B - A) +
+        (reps > 0 ? ', ' + reps + (reps === 1 ? ' rep' : ' reps') : '');
+    } else if (A != null) loopStatus.textContent = 'Now set the end (B).';
+    else loopStatus.textContent = 'Set a start and end to repeat a section.';
+  }
+
+  function syncChips() {
+    chipReps.hidden = true;
+    updateStatus();
+    chipSpeed.hidden = rate === 1 || kind !== 'yt';
+    chipSpeed.textContent = Math.round(rate * 100) + '% speed';
+    chipMirror.hidden = !mirrored;
+  }
+
+  function syncSpeed() {
+    speedBtns.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.speed === rate)));
+    fsSpeed.textContent = Math.round(rate * 100) + '%';
+  }
+
+  function syncCountdown() {
+    cdBtns.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.cd === countdown)));
+  }
+
+  function syncMirror() {
+    frame.classList.toggle('mirrored', mirrored);
+    mirrorBtn.setAttribute('aria-pressed', String(mirrored));
+    fsMirror.setAttribute('aria-pressed', String(mirrored));
+  }
+
+  function syncVol() {
+    player.classList.toggle('is-muted', muted || volume === 0);
+    muteBtn.setAttribute('aria-pressed', String(muted));
+    muteBtn.setAttribute('aria-label', muted ? 'Turn sound on' : 'Mute');
+    volSlider.value = String(Math.round(volume * 100));
+    volSlider.style.setProperty('--fill', (muted ? 0 : volume * 100) + '%');
+  }
+
+  function renderTime() {
+    const d = dur ? fmt(dur) : '--:--';
+    tNow.textContent = fmt(curT);
+    tDur.textContent = d;
+    fsNow.textContent = fmt(curT);
+    fsDur.textContent = ' / ' + d;
+    timeHint.hidden = !(ready && !dur);
+    tracks.forEach(renderTrack);
+  }
+
+  function syncAll() {
+    syncPlay(); syncLoop(); syncChips(); syncSpeed(); syncCountdown(); syncMirror(); syncVol(); renderTime();
+  }
+
+  // ---------- Sheets, toast, sound, screen ----------
+  function openSheet(s) {
+    sheetBg.hidden = false;
+    [nameSheet, linkSheet].forEach((x) => { x.hidden = x !== s; });
+    document.body.classList.add('lock');
+  }
+  function closeSheet() {
+    sheetBg.hidden = true;
+    if (!inFocus) document.body.classList.remove('lock');
+  }
+
+  function toast(msg, actionLabel, action) {
+    clearTimeout(toastTimer);
+    toastMsg.textContent = msg;
+    toastAction = action || null;
+    toastBtn.hidden = !action;
+    toastBtn.textContent = actionLabel || '';
+    toastEl.classList.toggle('has-action', !!action);
+    toastEl.classList.add('show');
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), action ? 5000 : 2800);
+  }
+
+  function ensureAudio() {
+    try {
+      if (!audioCtx) { const C = window.AudioContext || window.webkitAudioContext; if (C) audioCtx = new C(); }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    } catch (e) {}
+  }
+
+  function beep(freq, len = 0.12) {
+    if (!audioCtx || muted) return;
+    try {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain(), t = audioCtx.currentTime;
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t + len + 0.02);
+    } catch (e) {}
+  }
+
+  async function wakeOn() {
+    try { if ('wakeLock' in navigator && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } } catch (e) {}
+  }
+  function wakeOff() { try { if (wake) wake.release(); } catch (e) {} wake = null; }
+
+  // ---------- Events ----------
+  openBtn.addEventListener('click', () => openLink(linkInput.value));
+  linkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); openLink(linkInput.value); } });
+  linkInput.addEventListener('paste', () => {
+    setTimeout(() => { if (!parseLink(linkInput.value).err) openLink(linkInput.value); }, 0);
+  });
+  if (!(navigator.clipboard && navigator.clipboard.readText)) pasteBtn.hidden = true;
+  pasteBtn.addEventListener('click', async () => {
+    try {
+      const t = await navigator.clipboard.readText();
+      if (!t || !t.trim()) { toast('Nothing to paste. Copy the video link first.'); return; }
+      linkInput.value = t.trim();
+      openLink(t);
+    } catch (e) {
+      linkInput.focus();
+      toast('Tap the box, then choose Paste.');
+    }
+  });
+  newBtn.addEventListener('click', () => goHome(false));
+  $('ldRetry').addEventListener('click', () => { if (lastOpen) startVideo(lastOpen.k, lastOpen.id, lastOpen.vert, lastOpen.params); });
+  $('ldCancel').addEventListener('click', () => goHome(false));
+
+  $('play').addEventListener('click', togglePlay);
+  $('fsPlay').addEventListener('click', () => { togglePlay(); showUi(); });
+  $('setA').addEventListener('click', setA);
+  $('setB').addEventListener('click', setB);
+  $('fsSetA').addEventListener('click', () => { setA(); showUi(); });
+  $('fsSetB').addEventListener('click', () => { setB(); showUi(); });
+  aMinus.addEventListener('click', () => nudge('A', -0.1));
+  aPlus.addEventListener('click', () => nudge('A', 0.1));
+  bMinus.addEventListener('click', () => nudge('B', -0.1));
+  bPlus.addEventListener('click', () => nudge('B', 0.1));
+  resetBtn.addEventListener('click', resetLoop);
+  const backToA = () => { if (!ready) return; seekTo(A != null ? A : 0); renderTime(); };
+  $('toA').addEventListener('click', backToA);
+  $('fsToA').addEventListener('click', () => { backToA(); showUi(); });
+  saveLoopBtn.addEventListener('click', openNameSheet);
+  $('nameSave').addEventListener('click', commitName);
+  $('nameCancel').addEventListener('click', closeSheet);
+  nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); commitName(); } });
+  $('linkCopy').addEventListener('click', copyFromSheet);
+  $('linkClose').addEventListener('click', closeSheet);
+  sheetBg.addEventListener('click', (e) => { if (e.target === sheetBg) closeSheet(); });
+
+  speedBtns.forEach((b) => b.addEventListener('click', () => setRate(+b.dataset.speed)));
+  fsSpeed.addEventListener('click', () => { setRate(SPEEDS[(SPEEDS.indexOf(rate) + 1) % SPEEDS.length]); showUi(); });
+  cdBtns.forEach((b) => b.addEventListener('click', () => {
+    ensureAudio();
+    countdown = +b.dataset.cd; savePrefs(); syncCountdown();
+  }));
+  mirrorBtn.addEventListener('click', toggleMirror);
+  fsMirror.addEventListener('click', () => { toggleMirror(); showUi(); });
+  muteBtn.addEventListener('click', toggleMute);
+  volSlider.addEventListener('input', () => setVolume(+volSlider.value / 100));
+  shareBtn.addEventListener('click', share);
+
+  $('fsOpen').addEventListener('click', enterFocus);
+  $('fsOpen2').addEventListener('click', enterFocus);
+  $('fsExit').addEventListener('click', exitFocus);
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
+
+  tap.addEventListener('click', () => {
+    if (inFocus && stage.classList.contains('ui-hidden')) { showUi(); return; }
+    togglePlay();
+  });
+  stage.addEventListener('pointermove', () => { if (inFocus) showUi(); });
+
+  tracks.forEach(bindTrack);
+
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (/INPUT|TEXTAREA|SELECT/.test(tag) || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'Escape') { if (!sheetBg.hidden) closeSheet(); else exitFocus(); return; }
+    if (!sheetBg.hidden || player.hidden) return;
+    const k = e.key.toLowerCase();
+    if (k === ' ' || k === 'k') {
+      if (tag === 'BUTTON' && k === ' ') return;
+      e.preventDefault(); togglePlay();
+    } else if (k === 'a') setA();
+    else if (k === 'b') setB();
+    else if (k === 'm') toggleMirror();
+    else if (k === 'f') { if (inFocus) exitFocus(); else enterFocus(); }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && isPlaying) wakeOn();
+  });
+
+  // ---------- Start ----------
+  const isFile = !/^https?:$/.test(location.protocol);
+  let isFramed = false;
+  try { isFramed = window.self !== window.top; } catch (e) { isFramed = true; }
+  if (isFile) {
+    fileNote.textContent = "This page is open as a saved file, so YouTube and TikTok videos won't play. Open it from your website instead.";
+  } else if (isFramed) {
+    fileNote.textContent = "You're viewing a preview. YouTube and TikTok are usually blocked in previews, so videos may not open. Put this page on your website to use it.";
+  }
+  fileNote.hidden = !(isFile || isFramed);
+  syncVol(); syncCountdown();
+  renderRecent();
+  readParams();
+  requestAnimationFrame(tick);
+})();
+
+</script>
+</body>
+</html>
