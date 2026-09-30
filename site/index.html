@@ -303,8 +303,14 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
   background-image:repeating-linear-gradient(90deg,transparent 0 9px,var(--grain) 9px 10px,transparent 10px 23px)}
 .ld-head{position:absolute;top:0;height:26px;width:4px;margin-left:-2px;border-radius:2px;background:#fff;left:24%;animation:sweep 1.6s linear infinite}
 .ld-title{margin:0;font:700 18px/1.3 var(--sans);max-width:30ch}
-.ld-bar{width:min(240px,72%);height:6px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
-.ld-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.ld-bar{width:min(240px,72%);height:8px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden}
+/* Stripes drift backward. Studies show this makes the same wait feel shorter. */
+.ld-bar i{display:block;height:100%;width:0;border-radius:4px;background-color:var(--accent);
+  background-image:repeating-linear-gradient(-45deg,rgba(255,255,255,.3) 0 6px,transparent 6px 12px);background-size:17px 17px;
+  transition:width .5s linear;animation:ldRibs .9s linear infinite}
+.ld-bar i.done{transition:width .35s ease-out}
+@keyframes ldRibs{to{background-position:-17px 0}}
+.ld-eta{margin:-6px 0 0;font-size:13px;color:rgba(255,255,255,.6);min-height:1.3em}
 .ld-tip{margin:0;font-size:15px;color:rgba(255,255,255,.75);max-width:32ch;min-height:4.2em;white-space:pre-line}
 .ld-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
 .ld-btn{min-height:44px;font-size:15px}
@@ -314,7 +320,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
 .stage.focus .buf{bottom:calc(env(safe-area-inset-bottom,0px) + 200px)}
 .spin{width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion: reduce){.ld-head,.spin{animation:none}.ld-bar i{transition:none}}
+@media (prefers-reduced-motion: reduce){.ld-head,.spin,.ld-bar i{animation:none}.ld-bar i{transition:none}}
 </style>
 </head>
 <body>
@@ -384,6 +390,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
             <div class="ld-loop" aria-hidden="true"><div class="ld-rail"></div><div class="ld-band"></div><div class="ld-head"></div></div>
             <p class="ld-title" id="ldTitle" role="status" aria-live="polite">Opening video…</p>
             <div class="ld-bar" aria-hidden="true"><i id="ldBar"></i></div>
+            <p class="ld-eta" id="ldEta"></p>
             <p class="ld-tip" id="ldTip"></p>
             <div class="ld-actions" id="ldActions" hidden>
               <button class="btn ld-btn" id="ldRetry" type="button">Try again</button>
@@ -589,7 +596,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
   const savedGroup = $('savedGroup'), savedList = $('savedList'), shareBtn = $('shareBtn'), shareHelper = $('shareHelper');
   const sheetBg = $('sheetBg'), nameSheet = $('nameSheet'), nameInput = $('nameInput'), nameMeta = $('nameMeta');
   const linkSheet = $('linkSheet'), linkOut = $('linkOut');
-  const ldTitle = $('ldTitle'), ldBar = $('ldBar'), ldTip = $('ldTip'), ldActions = $('ldActions'), bufText = $('bufText');
+  const ldTitle = $('ldTitle'), ldBar = $('ldBar'), ldEta = $('ldEta'), ldTip = $('ldTip'), ldActions = $('ldActions'), bufText = $('bufText');
   const toastEl = $('toast'), toastMsg = $('toastMsg'), toastBtn = $('toastBtn');
 
   const ERR = {
@@ -812,54 +819,145 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     ['How did the cowboy know his cattle were behind him?', 'He herd them.'],
     ['What did 0 say to 8?', 'Nice belt.'],
     ['I ordered a chicken and an egg online.', 'I’ll let you know.'],
-    ['What do you call a factory that makes okay products?', 'A satisfactory.']
+    ['What do you call a factory that makes okay products?', 'A satisfactory.'],
+    ['Did you hear the rumor about butter?', 'I really shouldn’t be spreading it.'],
+    ['What do you call a man with a rubber toe?', 'Roberto.'],
+    ['A termite walks into a bar and asks,', '“Is the bar tender here?”'],
+    ['Why don’t oysters share their pearls?', 'Because they’re shellfish.'],
+    ['What do a tick and the Eiffel Tower have in common?', 'They’re both Paris sites.'],
+    ['My wife told me to stop impersonating a flamingo.', 'I had to put my foot down.'],
+    ['I wondered why the frisbee kept getting bigger.', 'Then it hit me.'],
+    ['The car looks great.', 'But the muffler seems exhausted.'],
+    ['If a kid refuses to take a nap,', 'are they guilty of resisting a rest?'],
+    ['I just burned 2,000 calories.', 'That’s the last time I nap with brownies in the oven.'],
+    ['Who invented King Arthur’s round table?', 'Sir Cumference.'],
+    ['How do turtles talk to each other?', 'Shell phones.'],
+    ['A scarecrow says, “This job isn’t for everyone.”', '“But hay, it’s in my jeans.”'],
+    ['I tried to sue the airline for losing my luggage.', 'I lost my case.'],
+    ['What does a clock do when it’s hungry?', 'It goes back for seconds.'],
+    ['My friend blocked me for posting too many bird puns.', 'Well, toucan play at that game.'],
+    ['I stayed up all night wondering where the sun went.', 'Then it dawned on me.'],
+    ['How do you get a country girl’s attention?', 'A tractor.'],
+    ['What do cowboys call midnight?', 'High moon.'],
+    ['How do you warm up a frozen cowboy?', 'Yee thaw!'],
+    ['What do you call a happy cowboy?', 'A jolly rancher.'],
+    ['What illness can cowboys catch from their horses?', 'Bronc-itis.'],
+    ['What do you call a retired cowboy?', 'De-ranged.'],
+    ['Why do cowboys struggle in math class?', 'They’re always rounding things up.'],
+    ['How did the cowboy save so much money?', 'His horse gave him a couple of bucks every day.'],
+    ['Why did the cowboy put racing stripes on his truck?', 'He needed a better pickup line.'],
+    ['Why do Canadian cowboys have sticky feet?', 'Maple stirrups.'],
+    ['Did you get a haircut?', 'No, I got them all cut.'],
+    ['What’s the best time to go to the dentist?', 'Tooth-hurty.']
   ];
   const JOKE_SECS = 12, PUNCH_AT = 5;
-  // TikTok's player can take 1 to 2 minutes, so give it a full minute before offering a way out.
+
+  // How long to expect. We time real loads on this phone and pad the estimate, so the video
+  // usually shows up early (under promise, over deliver). Until we have 3 real loads, use the default.
   const LOAD = {
-    yt: { ease: 4, help: 12 },
-    tt: { ease: 40, help: 60 }
+    yt: { def: 10, min: 8, max: 30, pad: 3, help: 12 },
+    tt: { def: 120, min: 45, max: 300, pad: 10, help: 120 }
   };
-  let ldTimer = null, ldStart = 0, ldTipBase = 0, ldLastTitle = '', ldLines = JOKES, bufTimer = null;
+  const LOAD_KEY = 'pnOnline:loadTimes';
+  function recordLoad(k, secs) {
+    const all = store.get(LOAD_KEY, {});
+    all[k] = (Array.isArray(all[k]) ? all[k] : []).concat(Math.round(secs * 10) / 10).slice(-8);
+    store.set(LOAD_KEY, all);
+  }
+  function expectSecs(k) {
+    const L = LOAD[k], times = (store.get(LOAD_KEY, {})[k] || []).filter(x => x > 0);
+    if (!times.length) return L.def;
+    let e = Math.max.apply(null, times) * 1.3 + L.pad;
+    if (times.length < 3) e = Math.max(e, L.def);
+    e = Math.min(L.max, Math.max(L.min, e));
+    return k === 'tt' ? Math.ceil(e / 15) * 15 : Math.ceil(e);
+  }
+  // Show "Try again" only well after we expected the video. Never before 2 minutes for TikTok.
+  const helpSecs = (k, e) => Math.max(LOAD[k].help, Math.round(e * 1.25));
+
+  // Jokes: show ones this phone hasn't seen yet first. Start over once all have been seen.
+  const JOKE_KEY = 'pnOnline:jokesSeen';
+  function jokeOrder() {
+    const seen = new Set(store.get(JOKE_KEY, []));
+    const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    return shuffle(JOKES.filter(j => !seen.has(j[0]))).concat(shuffle(JOKES.filter(j => seen.has(j[0]))));
+  }
+  function markJokeSeen(j) {
+    let seen = store.get(JOKE_KEY, []);
+    if (seen.includes(j[0])) return;
+    seen.push(j[0]);
+    if (seen.length >= JOKES.length) seen = [j[0]];
+    store.set(JOKE_KEY, seen);
+  }
+
+  // Progress: steady, and a little faster toward the end (bars that stall near the end feel slowest).
+  // Reaches 92% at the padded estimate, then creeps toward 97%. Jumps to 100% the moment the video is ready.
+  function ldPercent(t, e) {
+    const x = t / e;
+    if (x <= 1) return 3 + 89 * (0.85 * x + 0.15 * x * x);
+    return 92 + 5 * (1 - Math.exp(-(x - 1) * 2));
+  }
+  function etaText(left) {
+    if (left <= 0) return 'Taking a little longer than usual';
+    const r = Math.ceil(left / 15) * 15, m = Math.floor(r / 60), sec = r % 60;
+    return 'About ' + (m ? m + ' min' + (sec ? ' ' + sec + ' sec' : '') : sec + ' sec') + ' left';
+  }
+
+  let ldTimer = null, ldStart = 0, ldLastTitle = '', ldLines = JOKES, ldExpect = 0, ldHelp = 0, ldJoke = -1, bufTimer = null;
   let lastOpen = null;
 
   function startLoading() {
     stopLoading();
     ldStart = performance.now();
-    ldLines = JOKES.slice().sort(() => Math.random() - 0.5);
-    ldTipBase = 0;
+    ldLines = jokeOrder();
+    ldJoke = -1;
     ldLastTitle = '';
+    ldExpect = expectSecs(kind === 'tt' ? 'tt' : 'yt');
+    ldHelp = helpSecs(kind === 'tt' ? 'tt' : 'yt', ldExpect);
     ldActions.hidden = true;
+    ldBar.classList.remove('done');
+    ldBar.style.transition = 'none';
     ldBar.style.width = '0%';
+    void ldBar.offsetWidth;
+    ldBar.style.transition = '';
     ldTick();
     ldTimer = setInterval(ldTick, 250);
   }
 
   function ldTick() {
     const t = (performance.now() - ldStart) / 1000;
-    const L = kind === 'tt' ? LOAD.tt : LOAD.yt;
     let title;
     if (kind === 'tt') {
       // Keep this steady so it doesn't feel like something is wrong.
-      title = t < 120 ? 'Your TikTok video is on the way. TikTok usually takes 1 to 2 minutes to load.'
+      const wait = ldExpect <= 60 ? 'up to 1 minute' : ldExpect <= 120 ? '1 to 2 minutes' : 'up to ' + Math.ceil(ldExpect / 60) + ' minutes';
+      title = t < ldExpect ? 'Your TikTok video is on the way. TikTok usually takes ' + wait + ' to load.'
         : 'Still on the way. Thanks for hanging in there.';
+      ldEta.textContent = etaText(ldExpect - t);
     } else {
       if (t < 2) title = 'Opening YouTube…';
       else if (t < 6) title = 'Loading your video…';
       else if (t < 12) title = 'YouTube is a little slow. Almost there.';
       else title = "Still loading. It's not stuck, YouTube is just slow right now.";
+      ldEta.textContent = '';
     }
     if (title !== ldLastTitle) { ldTitle.textContent = title; ldLastTitle = title; }
-    // Moves fast at first, then eases toward 95% until the video is ready. TikTok eases slower.
-    ldBar.style.width = (95 * (1 - Math.exp(-t / L.ease))).toFixed(1) + '%';
-    const j = ldLines[(ldTipBase + Math.floor(t / JOKE_SECS)) % ldLines.length];
-    ldTip.textContent = t % JOKE_SECS < PUNCH_AT ? j[0] : j[0] + '\n' + j[1];
-    if (t >= L.help) ldActions.hidden = false;
+    ldBar.style.width = ldPercent(t, ldExpect).toFixed(1) + '%';
+    const n = Math.floor(t / JOKE_SECS), j = ldLines[n % ldLines.length];
+    const punch = t % JOKE_SECS >= PUNCH_AT;
+    ldTip.textContent = punch ? j[0] + '\n' + j[1] : j[0];
+    if (punch && ldJoke !== n) { ldJoke = n; markJokeSeen(j); }
+    if (t >= ldHelp) ldActions.hidden = false;
   }
 
   function stopLoading() {
     if (ldTimer) clearInterval(ldTimer);
     ldTimer = null;
+  }
+
+  // The video is ready: fill the bar the rest of the way so people see it finish.
+  function finishLoading() {
+    stopLoading();
+    ldBar.classList.add('done');
     ldBar.style.width = '100%';
   }
 
@@ -944,7 +1042,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     window.scrollTo(0, 0);
 
     const ev = {
-      ready: () => { if (token === loadToken) onReady(); },
+      ready: () => { if (token === loadToken && !ready) { recordLoad(k, (performance.now() - ldStart) / 1000); onReady(); } },
       state: (s) => { if (token === loadToken) onState(s); },
       error: (c) => { if (token === loadToken) failLoad(ERR[c] ? c : (k === 'yt' ? 'other' : 'tt3001')); }
     };
@@ -952,7 +1050,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
       if (token !== loadToken || ready) return;
       if (k === 'yt') failLoad('ytSlow');
       else { onReady(); toast("TikTok is slow. If the buttons don't work, tap the video to start it."); }
-    }, k === 'tt' ? 150000 : 30000);
+    }, k === 'tt' ? (ldHelp + 60) * 1000 : 30000);
 
     if (k === 'yt') {
       loadYouTubeApi()
@@ -985,8 +1083,10 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     if (ready) return;
     ready = true;
     clearTimeout(readyTimer);
-    stopLoading();
-    stage.classList.remove('loading');
+    finishLoading();
+    // Let the full bar show for a moment before the video appears.
+    const tok = loadToken;
+    setTimeout(() => { if (tok === loadToken) stage.classList.remove('loading'); }, 400);
     if (kind === 'yt') {
       P.setVolume(volume);
       P.setMuted(muted);
