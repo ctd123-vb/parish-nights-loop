@@ -16,7 +16,10 @@ The owner is not a developer and works from his phone. Keep changes small, teste
 - Instagram: not supported. Shows a message pointing to the phone app.
 - Share links hold all state in the URL, no database: `?yt=ID` or `?tt=ID`, plus `a`, `b` (seconds), `s` (speed), `m=1` (mirror), `n` (loop name).
 - Saved loops, recent videos, and preferences live in localStorage.
-- Loading screen: staged messages (0-2s, 2-6s, 6-12s, 12s+), easing progress bar, rotating practice tips, and Try again / Pick another video after 12s. Buffering pill during playback. Reuse this for any slow step.
+- Loading screen: staged messages, easing progress bar, rotating lines (practice tips mixed with dance dad jokes and fun facts, `TIPS` + `FUN`),
+  and Try again / Pick another video. Timing is per source in `LOAD`: YouTube help at 12s, TikTok help at 30s (TikTok loads slower).
+  Buffering pill during playback. First play on TikTok waits 7s (vs 2.5s) before the "Tap the video" tip. Reuse this for any slow step.
+- TikTok slow motion: not possible with TikTok's embed. The speed note points people to save the video and use `/phone/`.
 - Settings at the top of the script: `OFFLINE_APP_URL` (set to `/phone/`), `LINK_RESOLVER_URL` (`/.netlify/functions/resolve-link`).
 
 ## Known limits (confirmed in real testing)
