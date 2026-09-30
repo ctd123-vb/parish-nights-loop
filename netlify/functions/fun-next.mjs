@@ -5,7 +5,8 @@ import { getStore } from '@netlify/blobs';
 
 export default async (req) => {
   const n = Math.min(40, Math.max(1, parseInt(new URL(req.url).searchParams.get('n'), 10) || 15));
-  const store = getStore('loading-fun');
+  // Strong reads so the counter always moves forward (default reads can be up to a minute old).
+  const store = getStore({ name: 'loading-fun', consistency: 'strong' });
   const start = Number(await store.get('cursor')) || 0;
   await store.set('cursor', String(start + n));
   return new Response(JSON.stringify({ start }), {
