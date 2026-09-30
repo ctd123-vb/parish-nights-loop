@@ -16,14 +16,18 @@ The owner is not a developer and works from his phone. Keep changes small, teste
 - Instagram: not supported. Shows a message pointing to the phone app.
 - Share links hold all state in the URL, no database: `?yt=ID` or `?tt=ID`, plus `a`, `b` (seconds), `s` (speed), `m=1` (mirror), `n` (loop name).
 - Saved loops, recent videos, and preferences live in localStorage.
-- Loading screen: steady title, striped progress bar, "About X left" line, rotating dad jokes, and Try again / Pick another video.
-  - Jokes (`JOKES`, 54): setup, then punchline after 5s, new joke every 12s. Unseen jokes first per phone
-    (`pnOnline:jokesSeen` in localStorage), resets after all are seen. Practice tips (`TIPS`) hidden for now (owner asked).
-  - Timing is learned per phone: real load times go in `pnOnline:loadTimes` (last 8). Expected = slowest x 1.3 + pad,
-    rounded up (TikTok default 120s until 3 real loads). Under promise, over deliver.
+- Loading screen (TikTok): spinning record with floating notes, steady title ("usually takes 2 to 3 minutes"), striped
+  progress bar, "About X left", a headline, then rotating dad jokes, fun facts, trivia, and brain teasers. YouTube (class
+  `ld-short`) shows only the title and bar, because its box is short and it loads in seconds.
+  - Content lives in `JOKES` + `FUN_NEW` (about 360 items). Facts must be true; leave one out if unsure. Family friendly.
+    Kinds and timing in `FUN_KINDS` (answer shows after `reveal` seconds). Practice tips (`TIPS`) hidden (owner asked).
+  - `FUN_ORDER` is one fixed shuffled order, the same on every phone. The Netlify Function `fun-next` (Netlify Blobs
+    counter) hands each loading screen the next 15 spots, so different phones rarely see the same item. Each phone also
+    skips items it has seen (`pnOnline:funSeen`). If the function fails, a random start is used.
+  - Timing is fixed in `LOAD`: TikTok expects 180s, Try again at 150s, fallback "ready" at 210s. YouTube help at 12s.
+    Don't time TikTok's "ready" message: it arrives before the video can really play.
   - Bar: nearly steady, a bit faster near the end, 92% at the expected time, then creeps to 97%. Stripes drift backward
     (feels faster). Jumps to 100% on ready and holds 0.4s before the video shows.
-  - Try again: TikTok at max(120s, expected x 1.25). YouTube at 12s. TikTok fallback "ready" at help + 60s.
   - First play on TikTok waits 7s (vs 2.5s) before the "Tap the video" tip. Buffering pill during playback.
 - TikTok slow motion: not possible with TikTok's embed. The speed note points people to save the video and use `/phone/`.
 - Settings at the top of the script: `OFFLINE_APP_URL` (set to `/phone/`), `LINK_RESOLVER_URL` (`/.netlify/functions/resolve-link`).

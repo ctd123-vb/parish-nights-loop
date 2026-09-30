@@ -297,11 +297,18 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
 /* Loading screen */
 .stage.loading{min-height:270px}
 .stage.loading .loadmsg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;text-align:center;font-weight:400}
-.ld-loop{position:relative;width:170px;height:26px;margin-bottom:4px}
-.ld-rail{position:absolute;left:0;right:0;top:9px;height:8px;border-radius:4px;background:rgba(255,255,255,.18)}
-.ld-band{position:absolute;left:24%;width:46%;top:4px;height:18px;border-radius:5px;background-color:var(--accent);
-  background-image:repeating-linear-gradient(90deg,transparent 0 9px,var(--grain) 9px 10px,transparent 10px 23px)}
-.ld-head{position:absolute;top:0;height:26px;width:4px;margin-left:-2px;border-radius:2px;background:#fff;left:24%;animation:sweep 1.6s linear infinite}
+/* Loading art: a slowly spinning record with music notes floating up. */
+.ld-art{position:relative;width:84px;height:84px;margin-bottom:2px}
+.ld-disc{display:block;width:84px;height:84px;animation:spin 3.2s linear infinite}
+.ld-note{position:absolute;bottom:45%;font-size:20px;line-height:1;color:var(--accent);opacity:0;animation:ldNote 3.6s ease-out infinite}
+.ld-note.n1{left:-14px}
+.ld-note.n2{right:-14px;animation-delay:1.2s}
+.ld-note.n3{right:6px;bottom:70%;animation-delay:2.4s}
+@keyframes ldNote{0%{transform:translateY(0) rotate(-10deg);opacity:0}15%{opacity:.95}100%{transform:translateY(-44px) rotate(10deg);opacity:0}}
+.ld-fun-head{margin:8px 0 0;font-size:13px;color:rgba(255,255,255,.62);max-width:32ch}
+/* YouTube loads in seconds and its box is short, so it gets just the title and bar. */
+.ld-short .ld-art,.ld-short .ld-fun-head,.ld-short .ld-kind,.ld-short .ld-tip,.ld-short .ld-eta{display:none}
+.ld-kind{margin:0;font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .ld-title{margin:0;font:700 18px/1.3 var(--sans);max-width:30ch}
 .ld-bar{width:min(240px,72%);height:8px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden}
 /* Stripes drift backward. Studies show this makes the same wait feel shorter. */
@@ -320,7 +327,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
 .stage.focus .buf{bottom:calc(env(safe-area-inset-bottom,0px) + 200px)}
 .spin{width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion: reduce){.ld-head,.spin,.ld-bar i{animation:none}.ld-bar i{transition:none}}
+@media (prefers-reduced-motion: reduce){.ld-disc,.ld-note,.spin,.ld-bar i{animation:none}.ld-note{opacity:.8}.ld-bar i{transition:none}}
 </style>
 </head>
 <body>
@@ -387,10 +394,24 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
           <div class="hint" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.8v14.4a1 1 0 0 0 1.52.85l11.2-7.2a1 1 0 0 0 0-1.7L8.52 3.95A1 1 0 0 0 7 4.8z"/></svg></span></div>
           <div class="cd" id="cd" hidden aria-live="assertive"><b id="cdNum">3</b><span>Get in position</span></div>
           <div class="loadmsg" id="loadBox">
-            <div class="ld-loop" aria-hidden="true"><div class="ld-rail"></div><div class="ld-band"></div><div class="ld-head"></div></div>
+            <div class="ld-art" aria-hidden="true">
+              <svg class="ld-disc" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="48" fill="#0B0F18" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.08)"/>
+                <circle cx="50" cy="50" r="33" fill="none" stroke="rgba(255,255,255,.08)"/>
+                <circle cx="50" cy="50" r="26" fill="none" stroke="rgba(255,255,255,.08)"/>
+                <path d="M50 8 A42 42 0 0 1 88 32" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="17" style="fill:var(--accent)"/>
+                <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.5"/>
+                <circle cx="50" cy="50" r="2.6" fill="#0B0F18"/>
+              </svg>
+              <span class="ld-note n1">&#9834;&#65038;</span><span class="ld-note n2">&#9835;&#65038;</span><span class="ld-note n3">&#9834;&#65038;</span>
+            </div>
             <p class="ld-title" id="ldTitle" role="status" aria-live="polite">Opening video…</p>
             <div class="ld-bar" aria-hidden="true"><i id="ldBar"></i></div>
             <p class="ld-eta" id="ldEta"></p>
+            <p class="ld-fun-head">While you wait, enjoy some dad jokes, fun facts, trivia, and brain teasers.</p>
+            <p class="ld-kind" id="ldKind"></p>
             <p class="ld-tip" id="ldTip"></p>
             <div class="ld-actions" id="ldActions" hidden>
               <button class="btn ld-btn" id="ldRetry" type="button">Try again</button>
@@ -596,7 +617,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
   const savedGroup = $('savedGroup'), savedList = $('savedList'), shareBtn = $('shareBtn'), shareHelper = $('shareHelper');
   const sheetBg = $('sheetBg'), nameSheet = $('nameSheet'), nameInput = $('nameInput'), nameMeta = $('nameMeta');
   const linkSheet = $('linkSheet'), linkOut = $('linkOut');
-  const ldTitle = $('ldTitle'), ldBar = $('ldBar'), ldEta = $('ldEta'), ldTip = $('ldTip'), ldActions = $('ldActions'), bufText = $('bufText');
+  const ldTitle = $('ldTitle'), ldBar = $('ldBar'), ldEta = $('ldEta'), ldKind = $('ldKind'), ldTip = $('ldTip'), ldActions = $('ldActions'), bufText = $('bufText');
   const toastEl = $('toast'), toastMsg = $('toastMsg'), toastBtn = $('toastBtn');
 
   const ERR = {
@@ -850,48 +871,378 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     ['Did you get a haircut?', 'No, I got them all cut.'],
     ['What’s the best time to go to the dentist?', 'Tooth-hurty.']
   ];
-  const JOKE_SECS = 12, PUNCH_AT = 5;
-
-  // How long to expect. We time real loads on this phone and pad the estimate, so the video
-  // usually shows up early (under promise, over deliver). Until we have 3 real loads, use the default.
-  const LOAD = {
-    yt: { def: 10, min: 8, max: 30, pad: 3, help: 12 },
-    tt: { def: 120, min: 45, max: 300, pad: 10, help: 120 }
+  // Loading-screen content. Jokes, trivia and teasers show the answer a few seconds later.
+  // Keep it family friendly. Facts must be true; leave one out if you're not sure.
+  const FUN_NEW = {
+    joke: [
+    ['Why did the scarecrow win an award?', 'He was outstanding in his field.'],
+    ['I used to hate facial hair.', 'But then it grew on me.'],
+    ['Why don’t eggs tell jokes?', 'They’d crack each other up.'],
+    ['What do you call a bear with no teeth?', 'A gummy bear.'],
+    ['I only know 25 letters of the alphabet.', 'I don’t know y.'],
+    ['What did the ocean say to the beach?', 'Nothing. It just waved.'],
+    ['Why couldn’t the leopard play hide and seek?', 'He was always spotted.'],
+    ['What do you call a fish with no eyes?', 'A fsh.'],
+    ['I’m on a seafood diet.', 'I see food, and I eat it.'],
+    ['What did one wall say to the other wall?', 'I’ll meet you at the corner.'],
+    ['Why did the golfer bring two pairs of pants?', 'In case he got a hole in one.'],
+    ['What do you call cheese that isn’t yours?', 'Nacho cheese.'],
+    ['How does a penguin build its house?', 'Igloos it together.'],
+    ['Why did the coffee file a police report?', 'It got mugged.'],
+    ['What’s orange and sounds like a parrot?', 'A carrot.'],
+    ['How do you throw a party in space?', 'You planet.'],
+    ['Why do seagulls fly over the sea?', 'If they flew over the bay, they’d be bagels.'],
+    ['What do you call a pile of cats?', 'A meow-ntain.'],
+    ['I’d tell you a joke about pizza.', 'But it’s a little cheesy.'],
+    ['What did the grape do when it got stepped on?', 'It let out a little wine.'],
+    ['Why don’t skeletons fight each other?', 'They don’t have the guts.'],
+    ['What do you call a sleeping bull?', 'A bulldozer.'],
+    ['Why did the math book look so sad?', 'It had too many problems.'],
+    ['What kind of tree fits in your hand?', 'A palm tree.'],
+    ['How do you make a lemon drop?', 'Just let it fall.'],
+    ['What do you call an alligator in a vest?', 'An investigator.'],
+    ['Why did the tomato turn red?', 'It saw the salad dressing.'],
+    ['What’s a skeleton’s least favorite room?', 'The living room.'],
+    ['What did the buffalo say when his son left for college?', 'Bison.'],
+    ['How do you catch a squirrel?', 'Climb a tree and act like a nut.'],
+    ['What do you call a dog that does magic tricks?', 'A labracadabrador.'],
+    ['Why was the belt arrested?', 'It held up a pair of pants.'],
+    ['What do lawyers wear to court?', 'Lawsuits.'],
+    ['What do you call a boomerang that won’t come back?', 'A stick.'],
+    ['Why did the invisible man turn down the job?', 'He couldn’t see himself doing it.'],
+    ['What do you call a snowman with a six-pack?', 'An abdominal snowman.'],
+    ['Why did the stadium get hot after the game?', 'All the fans left.'],
+    ['What did the janitor say when he jumped out of the closet?', '“Supplies!”'],
+    ['Why are elevator jokes so good?', 'They work on so many levels.'],
+    ['What do you call a can opener that doesn’t work?', 'A can’t opener.'],
+    ['I told my wife she was drawing her eyebrows too high.', 'She looked surprised.'],
+    ['Why did the cookie go to the doctor?', 'It felt crummy.'],
+    ['What’s brown and sticky?', 'A stick.'],
+    ['What do you call a deer with no eyes?', 'No idea.'],
+    ['Why did the picture go to jail?', 'It was framed.'],
+    ['Why can’t a nose be 12 inches long?', 'Then it would be a foot.'],
+    ['What did the pirate say on his 80th birthday?', '“Aye matey.”'],
+    ['What do you call a belt made of watches?', 'A waist of time.'],
+    ['How do you find Will Smith in the snow?', 'Look for fresh prints.'],
+    ['Why don’t some couples go to the gym?', 'Some relationships don’t work out.'],
+    ['What kind of music do mummies love?', 'Wrap music.'],
+    ['Why couldn’t the string quartet find their composer?', 'He was Haydn.'],
+    ['What is Beethoven doing these days?', 'Decomposing.'],
+    ['What do you get when you drop a piano down a mine shaft?', 'A flat minor.'],
+    ['Why did the chicken join a band?', 'It already had the drumsticks.'],
+    ['Why don’t mountains get cold?', 'They wear snow caps.'],
+    ['What do you call a fake stone in Ireland?', 'A sham rock.'],
+    ['Why did the man put his money in the freezer?', 'He wanted cold hard cash.'],
+    ['What do you call a sad strawberry?', 'A blueberry.'],
+    ['What’s the best thing about Switzerland?', 'Not sure, but the flag is a big plus.'],
+    ['Why did the kid throw the clock out the window?', 'He wanted to see time fly.'],
+    ['What do you call an elephant that doesn’t matter?', 'An irrelephant.'],
+    ['How does the moon cut his hair?', 'Eclipse it.'],
+    ['Why did the gym close down?', 'It just didn’t work out.'],
+    ['What did one hat say to the other?', '“You stay here. I’ll go on ahead.”'],
+    ['What do you call two monkeys that share an Amazon account?', 'Prime mates.'],
+    ['What did the drummer name his twin daughters?', 'Anna One and Anna Two.'],
+    ['Why was Cinderella bad at soccer?', 'She kept running away from the ball.'],
+    ['What do you call a lazy kangaroo?', 'A pouch potato.'],
+    ['What do you call a bee that can’t make up its mind?', 'A maybe.'],
+    ['Why did the barber win the race?', 'He knew a shortcut.'],
+    ['Why don’t calendars ever get lonely?', 'They have lots of dates.'],
+    ['Where do boats go when they’re sick?', 'The dock.'],
+    ['How do you make a hot dog stand?', 'Take away its chair.'],
+    ['Why was the broom late?', 'It over-swept.'],
+    ['What does a house wear?', 'Address.'],
+    ['Why did the melon jump into the lake?', 'It wanted to be a watermelon.'],
+    ['What do you call a line of men waiting for haircuts?', 'A barberqueue.'],
+    ['Why do cows wear bells?', 'Because their horns don’t work.'],
+    ['What do you call a cow with no legs?', 'Ground beef.'],
+    ['What do you call the horse that lives next door?', 'Your neigh-bor.'],
+    ['What do you call a pig that knows karate?', 'A pork chop.'],
+    ['Why was the chicken team bad at baseball?', 'They kept hitting fowl balls.'],
+    ['What do you call a sheep with no legs?', 'A cloud.'],
+    ['How did the farmer find his missing wife?', 'He tractor down.'],
+    ['What did the mama cow say to the calf?', '“It’s pasture bedtime.”'],
+    ['How do trees get on the internet?', 'They log in.'],
+    ['Why was the computer cold?', 'It left its Windows open.'],
+    ['What kind of shoes do frogs wear?', 'Open toad.'],
+    ['What did the fish say when it swam into a wall?', '“Dam.”'],
+    ['What do you call a man who can’t stand up?', 'Neil.'],
+    ['Why did the banana go to the doctor?', 'It wasn’t peeling well.'],
+    ['What do you call a train carrying bubblegum?', 'A chew-chew train.'],
+    ['Why did the cow go to outer space?', 'To see the moooon.'],
+    ['Why did the cowboy boots go to therapy?', 'They had a lot of sole searching to do.'],
+    ['Why did the dancer bring a pencil to the show?', 'To draw a crowd.'],
+    ['What do you call a sleeping dinosaur?', 'A dino-snore.'],
+    ['What do you call a dinosaur with a huge vocabulary?', 'A thesaurus.'],
+    ['Why can’t you trust stairs?', 'They’re always up to something.'],
+    ['What did one plate say to the other plate?', '“Dinner’s on me.”'],
+    ['What kind of car does an egg drive?', 'A Yolkswagen.'],
+    ['What did the traffic light say to the car?', '“Don’t look. I’m changing.”'],
+    ['How do you make an egg roll?', 'You push it.'],
+    ['Why do ghosts love elevators?', 'They lift their spirits.'],
+    ['What do you call a magician who lost his magic?', 'Ian.'],
+    ['What’s a pirate’s favorite letter?', 'You’d think R, but his first love is the C.'],
+    ['Why did the man name his dogs Rolex and Timex?', 'They were watchdogs.'],
+    ['How does a cucumber become a pickle?', 'It goes through a jarring experience.'],
+    ['What do sprinters eat before a race?', 'Nothing. They fast.'],
+    ['Why did the tree go to the dentist?', 'It needed a root canal.'],
+    ['What do you call a fly without wings?', 'A walk.'],
+    ['Why did the teddy bear skip dessert?', 'It was already stuffed.'],
+    ['What do you call a bear with no ears?', 'B.'],
+    ['I got fired from the calendar factory.', 'All I did was take a day off.'],
+    ['I used to be addicted to soap.', 'But I’m clean now.'],
+    ['Want to hear a joke about paper?', 'Never mind. It’s tearable.'],
+    ['I’m afraid of elevators.', 'So I’m taking steps to avoid them.'],
+    ['What did the sushi say to the bee?', '“Wasabee!”'],
+    ['What’s the loudest pet?', 'A trumpet.'],
+    ['What do you call a group of messy cats?', 'A cat-astrophe.'],
+    ['I told my suitcase there’s no vacation this year.', 'Now I’m dealing with emotional baggage.'],
+    ['My dog used to chase people on a bike.', 'It got so bad I had to take his bike away.'],
+    ['What do you call a nervous javelin thrower?', 'Shakespeare.'],
+    ['Why is the fish bad at basketball?', 'It’s afraid of the net.'],
+    ['What do you call an old snowman?', 'Water.'],
+    ['What does a horse say when it falls down?', '“Help! I’ve fallen and I can’t giddyup!”'],
+    ['How do cows keep up with the news?', 'They read the moos-paper.'],
+    ['Why did the singer get locked out of his house?', 'He couldn’t find the right key.'],
+    ['What did the drum say to the drumstick?', '“Quit beating me up.”'],
+    ['Why did the cowboy get a dachshund?', 'To git a long little doggie.'],
+    ['What do you call a sheep covered in chocolate?', 'A candy baa.'],
+    ['Why was the math teacher late to class?', 'She took the rhombus.'],
+    ['Parallel lines have so much in common.', 'It’s a shame they’ll never meet.'],
+    ['What did the triangle say to the circle?', '“You’re pointless.”'],
+    ['How do you make seven even?', 'Take away the S.'],
+    ['What do you call a number that can’t sit still?', 'A roamin’ numeral.'],
+    ['What did the big flower say to the little flower?', '“Hi, bud.”'],
+    ['What do you call a shoe made from a banana?', 'A slipper.'],
+    ['Why did the soccer player bring string to the game?', 'To tie the score.'],
+    ['Why do basketball players love donuts?', 'They can dunk them.'],
+    ['What’s a boxer’s favorite drink?', 'Punch.'],
+    ['Where do cowboys keep their water?', 'In a ten-gallon hat.'],
+    ['What do you call a cow that plays the guitar?', 'A moo-sician.'],
+    ['Why did the horse keep falling over?', 'It just wasn’t stable.'],
+    ['What do you call a fake noodle?', 'An impasta.'],
+    ['Did you hear about the restaurant on the moon?', 'Great food. No atmosphere.'],
+    ['Why can’t a bicycle stand up on its own?', 'It’s two tired.'],
+    ['Why do bees have sticky hair?', 'They use honeycombs.'],
+    ['What do you call a pony with a sore throat?', 'A little hoarse.'],
+    ['What do you call a rabbit with fleas?', 'Bugs Bunny.']
+    ],
+    fact: [
+    'Honey found in ancient Egyptian tombs was still safe to eat thousands of years later.',
+    'Octopuses have three hearts.',
+    'A group of flamingos is called a flamboyance.',
+    'Bananas count as berries, but strawberries don’t.',
+    'Sea otters sometimes hold hands while they sleep so they don’t drift apart.',
+    'A day on Venus is longer than a year on Venus.',
+    'Wombat poop is shaped like little cubes.',
+    'The Eiffel Tower can grow about 6 inches taller on hot summer days.',
+    'Sharks have been around longer than trees.',
+    'Studies show that dancing can help with balance and memory as we get older.',
+    'Cowboy boots have pointed toes so riders can slip into the stirrups easily.',
+    'The heel on a cowboy boot helps keep your foot from sliding through the stirrup.',
+    'Louisiana grows most of the farmed crawfish in the United States.',
+    'Texas made the square dance its official state folk dance in 1991.',
+    'More than 20 U.S. states name the square dance as their state folk dance.',
+    'The word “zydeco” likely comes from the French phrase “les haricots,” meaning “the beans.”',
+    'The fiddle and the violin are the same instrument. The difference is the style of music.',
+    'A hummingbird’s heart can beat more than 1,200 times a minute.',
+    'Butterflies taste with their feet.',
+    'Honeybees do a “waggle dance” to tell other bees where to find flowers.',
+    'A bird called the red-capped manakin does a moonwalk-like dance to impress a mate.',
+    'A cockatoo named Snowball became famous for dancing to the beat of music.',
+    'The Lindy Hop is said to be named after Charles Lindbergh’s 1927 flight across the Atlantic.',
+    'The Grand Ole Opry has been on the radio since 1925. It’s the longest-running radio show in U.S. history.',
+    'A puffy white cloud can weigh more than a million pounds.',
+    'A bolt of lightning is about five times hotter than the surface of the sun.',
+    'Koalas can sleep up to 20 hours a day.',
+    'Cats can’t taste sweet things.',
+    'Every dog’s nose print is unique, like a fingerprint.',
+    'Crows can recognize human faces and remember them for years.',
+    'The dot over a lowercase i or j is called a tittle.',
+    'The # symbol is also called an octothorpe.',
+    'The shortest war in history lasted about 38 minutes.',
+    'Peanuts aren’t nuts. They’re legumes, like beans and peas.',
+    'Water can boil and freeze at the same time under just the right pressure.',
+    'An ostrich’s eye is bigger than its brain.',
+    'Starfish don’t have brains.',
+    'Jellyfish have no brain and no heart.',
+    'A blue whale’s heart is about the size of a golf cart.',
+    'Bubble wrap was first invented to be used as wallpaper.',
+    'Early carrots were purple or yellow. Orange carrots came later.',
+    'The Statue of Liberty was a shiny copper color before it turned green.',
+    'Scotland’s national animal is the unicorn.',
+    'There are more trees on Earth than stars in the Milky Way.',
+    'In the Middle Ages, a “moment” meant about 90 seconds.',
+    'The Electric Slide line dance was created in 1976.',
+    'Cajun French is still spoken in parts of south Louisiana.',
+    'Mardi Gras means “Fat Tuesday” in French.',
+    'Lafayette hosts Festival International de Louisiane, a free music festival, every spring.',
+    'Tabasco sauce is made on Avery Island, Louisiana.',
+    'The Atchafalaya Basin is the largest river swamp in the United States.',
+    'Your brain uses about 20% of your body’s energy.',
+    'Sloths can hold their breath longer than dolphins can.',
+    'Some penguins give their mate a pebble, kind of like a ring.',
+    'Rats make happy chirping sounds when they are tickled.',
+    'The moon has moonquakes.',
+    'The Pringles can inventor asked for some of his ashes to be buried in a Pringles can. They were.',
+    'Babies as young as 5 months old move their bodies to music with a beat.',
+    'Louisiana is the only U.S. state with parishes instead of counties.',
+    'Elvis Presley was filmed only from the waist up on one TV show because his dancing was too wild for 1957.',
+    'Cows have close friends and can get stressed when they’re apart.',
+    'A jiffy is a real unit of time used by scientists.',
+    'Hot peppers get their heat from a chemical called capsaicin. Birds can’t taste it.',
+    'The Mississippi River carries water from all or part of 31 U.S. states.'
+    ],
+    trivia: [
+    ['Which U.S. state has parishes instead of counties?', 'Louisiana.'],
+    ['How many keys are on a standard piano?', '88.'],
+    ['How many strings does a standard guitar have?', 'Six.'],
+    ['What’s the largest planet in our solar system?', 'Jupiter.'],
+    ['What’s the fastest land animal?', 'The cheetah.'],
+    ['What’s the hardest natural substance on Earth?', 'Diamond.'],
+    ['Which planet is called the Red Planet?', 'Mars.'],
+    ['Who sang “Friends in Low Places”?', 'Garth Brooks.'],
+    ['Which country singer is often called the “King of Country”?', 'George Strait.'],
+    ['Who wrote and sang “Jolene”?', 'Dolly Parton.'],
+    ['What’s the capital of Louisiana?', 'Baton Rouge.'],
+    ['What’s Louisiana’s state bird?', 'The brown pelican.'],
+    ['How many counts is a basic East Coast Swing step?', 'Six.'],
+    ['What’s the rhythm of a Texas two-step?', 'Quick, quick, slow, slow.'],
+    ['What’s the tallest animal in the world?', 'The giraffe.'],
+    ['How many minutes are in a day?', '1,440.'],
+    ['What’s the smallest bone in the human body?', 'The stapes, in your ear.'],
+    ['How many bones does an adult human have?', '206.'],
+    ['What’s the largest ocean on Earth?', 'The Pacific Ocean.'],
+    ['What gas do plants take in from the air?', 'Carbon dioxide.'],
+    ['In what year did people first walk on the Moon?', '1969.'],
+    ['What’s the longest river in the United States?', 'The Missouri River.'],
+    ['Which continent has no native ants?', 'Antarctica.'],
+    ['Which planet spins on its side?', 'Uranus.'],
+    ['What color is a polar bear’s skin?', 'Black.'],
+    ['Which fruit wears its seeds on the outside?', 'The strawberry.'],
+    ['What’s a baby kangaroo called?', 'A joey.'],
+    ['What’s a baby horse called?', 'A foal.'],
+    ['How many players does a baseball team have on the field?', 'Nine.'],
+    ['Who painted the Mona Lisa?', 'Leonardo da Vinci.'],
+    ['What’s the main ingredient in guacamole?', 'Avocado.'],
+    ['In which dance would you hear a caller say “do-si-do”?', 'Square dancing.'],
+    ['What dance craze did Chubby Checker start in 1960?', 'The Twist.'],
+    ['Besides the accordion, what metal instrument is a big part of zydeco music?', 'The rubboard, or frottoir.'],
+    ['In Cajun cooking, what three vegetables make up the “holy trinity”?', 'Onion, celery, and bell pepper.'],
+    ['How many sides does a hexagon have?', 'Six.'],
+    ['What’s the national bird of the United States?', 'The bald eagle.'],
+    ['What’s the hottest planet in our solar system?', 'Venus.'],
+    ['What’s the largest desert in the world?', 'Antarctica. A desert is any place with very little rain or snow.'],
+    ['Which country gave the United States the Statue of Liberty?', 'France.'],
+    ['Which metal is a liquid at room temperature?', 'Mercury.'],
+    ['What sport is played at Wimbledon?', 'Tennis.'],
+    ['Which 1992 Billy Ray Cyrus song set off a huge line dance craze?', '“Achy Breaky Heart.”'],
+    ['What do you call a group of crows?', 'A murder.'],
+    ['Which state is known as the Pelican State?', 'Louisiana.']
+    ],
+    teaser: [
+    ['What has keys but can’t open locks?', 'A piano.'],
+    ['What gets wetter the more it dries?', 'A towel.'],
+    ['What has hands but can’t clap?', 'A clock.'],
+    ['What has a neck but no head?', 'A bottle.'],
+    ['What can you catch but not throw?', 'A cold.'],
+    ['What goes up but never comes down?', 'Your age.'],
+    ['The more you take, the more you leave behind. What are they?', 'Footsteps.'],
+    ['What has one eye but can’t see?', 'A needle.'],
+    ['What has lots of teeth but can’t bite?', 'A comb.'],
+    ['What’s full of holes but still holds water?', 'A sponge.'],
+    ['What can travel around the world while staying in a corner?', 'A stamp.'],
+    ['What has a head and a tail but no body?', 'A coin.'],
+    ['Which building has the most stories?', 'A library.'],
+    ['I’m tall when I’m young and short when I’m old. What am I?', 'A candle.'],
+    ['Which month has 28 days?', 'All of them.'],
+    ['What can you break without touching it?', 'A promise.'],
+    ['What has legs but can’t walk?', 'A table.'],
+    ['What belongs to you, but other people use it more than you do?', 'Your name.'],
+    ['What goes through towns and fields but never moves?', 'A road.'],
+    ['If you have me, you want to share me. If you share me, you don’t have me. What am I?', 'A secret.'],
+    ['What has words but never speaks?', 'A book.'],
+    ['A farmer has 17 sheep. All but 9 run away. How many are left?', 'Nine.'],
+    ['How many times can you subtract 10 from 100?', 'Once. After that, you’re subtracting from 90.'],
+    ['What word is spelled wrong in every dictionary?', 'The word “wrong.”'],
+    ['What comes once in a minute, twice in a moment, and never in a thousand years?', 'The letter M.'],
+    ['What has four wheels and flies?', 'A garbage truck.'],
+    ['What can fill a room but takes up no space?', 'Light.'],
+    ['A rooster lays an egg on top of a barn roof. Which way does the egg roll?', 'Neither way. Roosters don’t lay eggs.'],
+    ['What 5-letter word gets shorter when you add two letters to it?', 'Short.'],
+    ['What lets you look right through a wall?', 'A window.'],
+    ['Forward I’m heavy, backward I’m not. What am I?', 'A ton.'],
+    ['What has 13 hearts but no other organs?', 'A deck of cards.'],
+    ['What kind of band never plays music?', 'A rubber band.'],
+    ['What can you hold in your right hand but never in your left?', 'Your left elbow.'],
+    ['If two’s company and three’s a crowd, what are four and five?', 'Nine.'],
+    ['What has a thumb and four fingers but isn’t alive?', 'A glove.'],
+    ['What starts with T, ends with T, and has T in it?', 'A teapot.'],
+    ['What gets bigger the more you take away from it?', 'A hole.'],
+    ['Mary’s father has five daughters: Nana, Nene, Nini, and Nono. What’s the fifth daughter’s name?', 'Mary.'],
+    ['What can go up a chimney down, but can’t go down a chimney up?', 'An umbrella.'],
+    ['Which weighs more, a pound of feathers or a pound of bricks?', 'Neither. They both weigh one pound.'],
+    ['What runs but never walks, and has a bed but never sleeps?', 'A river.'],
+    ['What has a bark but no bite?', 'A tree.'],
+    ['What can you keep after giving it to someone?', 'Your word.'],
+    ['What begins with an E but has only one letter in it?', 'An envelope.'],
+    ['What goes up and down but never moves?', 'The stairs.'],
+    ['What has cities but no houses, and water but no fish?', 'A map.'],
+    ['The day before yesterday I was 21. Next year I’ll be 24. When is my birthday?', 'December 31. (Today is January 1.)'],
+    ['What has one head, one foot, and four legs?', 'A bed.']
+    ]
   };
-  const LOAD_KEY = 'pnOnline:loadTimes';
-  function recordLoad(k, secs) {
-    const all = store.get(LOAD_KEY, {});
-    all[k] = (Array.isArray(all[k]) ? all[k] : []).concat(Math.round(secs * 10) / 10).slice(-8);
-    store.set(LOAD_KEY, all);
-  }
-  function expectSecs(k) {
-    const L = LOAD[k], times = (store.get(LOAD_KEY, {})[k] || []).filter(x => x > 0);
-    if (!times.length) return L.def;
-    let e = Math.max.apply(null, times) * 1.3 + L.pad;
-    if (times.length < 3) e = Math.max(e, L.def);
-    e = Math.min(L.max, Math.max(L.min, e));
-    return k === 'tt' ? Math.ceil(e / 15) * 15 : Math.ceil(e);
-  }
-  // Show "Try again" only well after we expected the video. Never before 2 minutes for TikTok.
-  const helpSecs = (k, e) => Math.max(LOAD[k].help, Math.round(e * 1.25));
 
-  // Jokes: show ones this phone hasn't seen yet first. Start over once all have been seen.
-  const JOKE_KEY = 'pnOnline:jokesSeen';
-  function jokeOrder() {
-    const seen = new Set(store.get(JOKE_KEY, []));
-    const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-    return shuffle(JOKES.filter(j => !seen.has(j[0]))).concat(shuffle(JOKES.filter(j => seen.has(j[0]))));
+  // One list, mixed like: joke, fact, joke, teaser, joke, trivia. The order is the same on every phone
+  // (fixed shuffle), and a shared counter on Netlify tells each phone where to start. So two phones
+  // rarely see the same item, and each phone also skips items it has already seen.
+  const FUN_KINDS = {
+    joke: { label: 'Dad joke', secs: 13, reveal: 5 },
+    fact: { label: 'Fun fact', secs: 11, reveal: 0 },
+    trivia: { label: 'Trivia', secs: 14, reveal: 6 },
+    teaser: { label: 'Brain teaser', secs: 18, reveal: 9 }
+  };
+  const FUN_ORDER = (() => {
+    let seed = 20260930;
+    const rnd = () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const mix = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const pools = {
+      joke: mix(JOKES.concat(FUN_NEW.joke).map(x => ({ k: 'joke', q: x[0], a: x[1] }))),
+      fact: mix(FUN_NEW.fact.map(x => ({ k: 'fact', q: x }))),
+      trivia: mix(FUN_NEW.trivia.map(x => ({ k: 'trivia', q: x[0], a: x[1] }))),
+      teaser: mix(FUN_NEW.teaser.map(x => ({ k: 'teaser', q: x[0], a: x[1] })))
+    };
+    const pattern = ['joke', 'fact', 'joke', 'teaser', 'joke', 'trivia'], out = [];
+    while (pattern.some(k => pools[k].length)) pattern.forEach(k => { if (pools[k].length) out.push(pools[k].shift()); });
+    out.forEach(x => { let h = 5381; for (let i = 0; i < x.q.length; i++) h = (h * 33 ^ x.q.charCodeAt(i)) >>> 0; x.id = h.toString(36); });
+    return out;
+  })();
+  const FUN_URL = '/.netlify/functions/fun-next';
+  const SEEN_KEY = 'pnOnline:funSeen';
+  let funPos = 0, funSeen = new Set();
+  function nextFun() {
+    const n = FUN_ORDER.length;
+    for (let i = 0; i < n; i++) {
+      const x = FUN_ORDER[(funPos++) % n];
+      if (!funSeen.has(x.id)) return x;
+    }
+    funSeen = new Set();
+    return FUN_ORDER[(funPos++) % n];
   }
-  function markJokeSeen(j) {
-    let seen = store.get(JOKE_KEY, []);
-    if (seen.includes(j[0])) return;
-    seen.push(j[0]);
-    if (seen.length >= JOKES.length) seen = [j[0]];
-    store.set(JOKE_KEY, seen);
+  function markFunSeen(x) {
+    funSeen.add(x.id);
+    if (funSeen.size >= FUN_ORDER.length) funSeen = new Set([x.id]);
+    store.set(SEEN_KEY, Array.from(funSeen));
   }
+
+  // How long to expect. TikTok's "ready" signal comes before the video can really play, so we don't
+  // time it. We plan for 3 minutes and hope to beat it (under promise, over deliver).
+  const LOAD = {
+    yt: { expect: 10, help: 12 },
+    tt: { expect: 180, help: 150 }
+  };
 
   // Progress: steady, and a little faster toward the end (bars that stall near the end feel slowest).
-  // Reaches 92% at the padded estimate, then creeps toward 97%. Jumps to 100% the moment the video is ready.
+  // Reaches 92% at the expected time, then creeps toward 97%. Jumps to 100% the moment the video is ready.
   function ldPercent(t, e) {
     const x = t / e;
     if (x <= 1) return 3 + 89 * (0.85 * x + 0.15 * x * x);
@@ -903,17 +1254,29 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     return 'About ' + (m ? m + ' min' + (sec ? ' ' + sec + ' sec' : '') : sec + ' sec') + ' left';
   }
 
-  let ldTimer = null, ldStart = 0, ldLastTitle = '', ldLines = JOKES, ldExpect = 0, ldHelp = 0, ldJoke = -1, bufTimer = null;
+  let ldTimer = null, ldStart = 0, ldLastTitle = '', ldExpect = 0, ldHelp = 0, ldFun = null, ldFunAt = 0, ldFunShown = '', bufTimer = null;
   let lastOpen = null;
 
   function startLoading() {
     stopLoading();
     ldStart = performance.now();
-    ldLines = jokeOrder();
-    ldJoke = -1;
+    const L = kind === 'tt' ? LOAD.tt : LOAD.yt;
+    document.getElementById('loadBox').classList.toggle('ld-short', kind !== 'tt');
     ldLastTitle = '';
-    ldExpect = expectSecs(kind === 'tt' ? 'tt' : 'yt');
-    ldHelp = helpSecs(kind === 'tt' ? 'tt' : 'yt', ldExpect);
+    ldExpect = L.expect;
+    ldHelp = L.help;
+    funSeen = new Set(store.get(SEEN_KEY, []));
+    funPos = Math.floor(Math.random() * FUN_ORDER.length);
+    ldFun = null; ldFunShown = '';
+    // Ask the shared counter where this phone should start. If it's slow or down, the random start is fine.
+    if (/^https?:$/.test(location.protocol)) {
+      const tok = loadToken, ctl = window.AbortController ? new AbortController() : null;
+      if (ctl) setTimeout(() => ctl.abort(), 3000);
+      fetch(FUN_URL + '?n=15', { cache: 'no-store', signal: ctl ? ctl.signal : undefined })
+        .then(r => r.ok ? r.json() : null)
+        .then(j => { if (j && typeof j.start === 'number' && tok === loadToken) funPos = j.start % FUN_ORDER.length; })
+        .catch(() => {});
+    }
     ldActions.hidden = true;
     ldBar.classList.remove('done');
     ldBar.style.transition = 'none';
@@ -929,8 +1292,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     let title;
     if (kind === 'tt') {
       // Keep this steady so it doesn't feel like something is wrong.
-      const wait = ldExpect <= 60 ? 'up to 1 minute' : ldExpect <= 120 ? '1 to 2 minutes' : 'up to ' + Math.ceil(ldExpect / 60) + ' minutes';
-      title = t < ldExpect ? 'Your TikTok video is on the way. TikTok usually takes ' + wait + ' to load.'
+      title = t < ldExpect ? 'Your TikTok video is on the way. TikTok usually takes 2 to 3 minutes to load.'
         : 'Still on the way. Thanks for hanging in there.';
       ldEta.textContent = etaText(ldExpect - t);
     } else {
@@ -942,10 +1304,14 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     }
     if (title !== ldLastTitle) { ldTitle.textContent = title; ldLastTitle = title; }
     ldBar.style.width = ldPercent(t, ldExpect).toFixed(1) + '%';
-    const n = Math.floor(t / JOKE_SECS), j = ldLines[n % ldLines.length];
-    const punch = t % JOKE_SECS >= PUNCH_AT;
-    ldTip.textContent = punch ? j[0] + '\n' + j[1] : j[0];
-    if (punch && ldJoke !== n) { ldJoke = n; markJokeSeen(j); }
+    if (!ldFun || t - ldFunAt >= FUN_KINDS[ldFun.k].secs) {
+      ldFun = nextFun(); ldFunAt = t;
+      ldKind.textContent = FUN_KINDS[ldFun.k].label;
+      markFunSeen(ldFun);
+    }
+    const F = FUN_KINDS[ldFun.k], shown = ldFun.a && t - ldFunAt >= F.reveal;
+    const text = shown ? ldFun.q + '\n' + (ldFun.k === 'joke' ? ldFun.a : 'Answer: ' + ldFun.a) : ldFun.q;
+    if (text !== ldFunShown) { ldTip.textContent = text; ldFunShown = text; }
     if (t >= ldHelp) ldActions.hidden = false;
   }
 
@@ -1042,7 +1408,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
     window.scrollTo(0, 0);
 
     const ev = {
-      ready: () => { if (token === loadToken && !ready) { recordLoad(k, (performance.now() - ldStart) / 1000); onReady(); } },
+      ready: () => { if (token === loadToken) onReady(); },
       state: (s) => { if (token === loadToken) onState(s); },
       error: (c) => { if (token === loadToken) failLoad(ERR[c] ? c : (k === 'yt' ? 'other' : 'tt3001')); }
     };
