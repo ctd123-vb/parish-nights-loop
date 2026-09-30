@@ -1605,7 +1605,10 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
   openBtn.addEventListener('click', () => openLink(linkInput.value));
   linkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); openLink(linkInput.value); } });
   linkInput.addEventListener('paste', () => {
-    setTimeout(() => { if (!parseLink(linkInput.value).err) openLink(linkInput.value); }, 0);
+    setTimeout(() => {
+      const err = parseLink(linkInput.value).err;
+      if (!err || (err === 'tiktokShort' && LINK_RESOLVER_URL)) openLink(linkInput.value);
+    }, 0);
   });
   if (!(navigator.clipboard && navigator.clipboard.readText)) pasteBtn.hidden = true;
   pasteBtn.addEventListener('click', async () => {
