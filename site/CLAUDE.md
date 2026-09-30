@@ -17,16 +17,17 @@ The owner is not a developer and works from his phone. Keep changes small, teste
 - Share links hold all state in the URL, no database: `?yt=ID` or `?tt=ID`, plus `a`, `b` (seconds), `s` (speed), `m=1` (mirror), `n` (loop name).
 - Saved loops, recent videos, and preferences live in localStorage.
 - Loading screen: staged messages (0-2s, 2-6s, 6-12s, 12s+), easing progress bar, rotating practice tips, and Try again / Pick another video after 12s. Buffering pill during playback. Reuse this for any slow step.
-- Settings at the top of the script: `OFFLINE_APP_URL` (set to `/phone/`), `LINK_RESOLVER_URL` (empty for now).
+- Settings at the top of the script: `OFFLINE_APP_URL` (set to `/phone/`), `LINK_RESOLVER_URL` (`/.netlify/functions/resolve-link`).
 
 ## Known limits (confirmed in real testing)
 - Some YouTube videos refuse to play outside YouTube (error 101/150). This is set per video by the owner or music label. Not a bug.
-- Short TikTok links from the app (vm.tiktok.com, tiktok.com/t/...) fail. They need a server to follow the redirect.
+- Short TikTok links from the app (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/...) go through the Netlify Function
+  `netlify/functions/resolve-link.mjs` (repo root). It only follows redirects on tiktok.com hosts, never downloads.
 - TikTok sound may stay off on iPhone when playback starts outside TikTok's player.
 - Rep count is intentionally NOT shown on the video. It lives in the loop panel.
 
 ## Roadmap (only when the owner asks)
-1. Netlify Function to resolve short TikTok links (only follows redirects, never downloads). Point `LINK_RESOLVER_URL` at it.
+1. DONE: Netlify Function to resolve short TikTok links (see Known limits).
 2. Apify backend (Netlify Function) that returns a playable video file URL for TikTok and Instagram links,
    so the app can play them in its own <video> player with slow motion. Store the key as the `APIFY_TOKEN` env var, never in code.
    Show the loading screen with honest stages while Apify works. Owner knows this is against TikTok/Instagram terms and may break.

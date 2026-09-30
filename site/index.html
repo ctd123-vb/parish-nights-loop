@@ -561,7 +561,7 @@ body.drop-over .wrap{outline:3px dashed var(--denim);outline-offset:-8px;border-
   // Link to the phone-video version of Loop Practice, for example '/phone/'. Leave empty to hide it.
   const OFFLINE_APP_URL = '/phone/';
   // Optional: URL of the link-resolver worker, so short TikTok links (vm.tiktok.com) work.
-  const LINK_RESOLVER_URL = '';
+  const LINK_RESOLVER_URL = '/.netlify/functions/resolve-link';
   // ===========================================================
 
   const $ = (id) => document.getElementById(id);
